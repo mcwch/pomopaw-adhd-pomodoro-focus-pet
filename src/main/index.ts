@@ -1,8 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { appReadyRequestSchema } from '../shared/ipc'
+import { createTrayController } from './tray'
+
+let tray: Tray | undefined
 
 function createWindow(): void {
   // Create the browser window.
@@ -23,6 +26,9 @@ function createWindow(): void {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+
+  const controller = createTrayController(mainWindow, app)
+  mainWindow.on('close', (event) => controller.onMainWindowClose(event))
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
@@ -59,6 +65,14 @@ app.whenReady().then(() => {
 
   createWindow()
 
+  tray = new Tray(icon)
+  tray.setToolTip('Focus Companion')
+  tray.setContextMenu(Menu.buildFromTemplate([
+    { label: 'Show Focus Companion', click: () => BrowserWindow.getAllWindows()[0]?.show() },
+    { label: 'Quit', click: () => app.quit() }
+  ]))
+  tray.on('click', () => BrowserWindow.getAllWindows()[0]?.show())
+
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -70,9 +84,7 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // The tray owns lifetime on Windows; Quit is always explicit.
 })
 
 // In this file you can include the rest of your app's specific main process
