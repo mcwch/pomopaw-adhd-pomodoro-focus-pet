@@ -2,9 +2,9 @@ import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { appReadyRequestSchema } from '../shared/ipc'
+import { appReadyRequestSchema, ollamaFirstStepRequestSchema } from '../shared/ipc'
 import { createTrayController } from './tray'
-import { detectLocalOllama } from './ollama'
+import { detectLocalOllama, getFirstStepFromLocalOllama } from './ollama'
 
 let tray: Tray | undefined
 
@@ -65,6 +65,10 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('ollama:status', () => detectLocalOllama())
+  ipcMain.handle('ollama:first-step', (_event, request: unknown) => {
+    const { task } = ollamaFirstStepRequestSchema.parse(request)
+    return getFirstStepFromLocalOllama(task).then((suggestion) => ({ suggestion }))
+  })
 
   createWindow()
 

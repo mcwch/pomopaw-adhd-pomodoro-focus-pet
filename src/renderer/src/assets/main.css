@@ -18,4 +18,7 @@ select { background: #1d2b52; border: 1px solid #4b6193; border-radius: 10px; co
 .local-ai-status { background: #1d2b52; border: 1px solid #4b6193; border-radius: 16px; display: grid; gap: 6px; max-width: 440px; padding: 14px 16px; color: #dbe6ff; }
 .local-ai-status span { color: #b8ccff; font-size: .9rem; }
 .local-ai-status code { color: #fff2b0; }
+.local-ai-first-step { display: grid; gap: 8px; }
+.local-ai-first-step p { background: #263965; border-radius: 14px; margin: 0; max-width: 440px; padding: 12px 16px; }
+.local-ai-first-step span { color: #b8ccff; font-size: .85rem; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

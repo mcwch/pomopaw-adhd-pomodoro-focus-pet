@@ -4,7 +4,8 @@ import type { FocusAppApi } from '../shared/ipc'
 // Custom APIs for renderer
 const focusApp: FocusAppApi = {
   appReady: () => ipcRenderer.invoke('app:ready', {}),
-  ollamaStatus: () => ipcRenderer.invoke('ollama:status')
+  ollamaStatus: () => ipcRenderer.invoke('ollama:status'),
+  ollamaFirstStep: (task) => ipcRenderer.invoke('ollama:first-step', { task })
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
