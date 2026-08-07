@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createAmbientSound, type AmbientSound } from './audio'
 import TodayBoard from './components/TodayBoard'
 import Companion from './components/Companion'
+import StudyCorner from './components/StudyCorner'
 
 function App(): React.JSX.Element {
   const [task, setTask] = useState('')
@@ -10,6 +11,7 @@ function App(): React.JSX.Element {
   const [remainingSeconds, setRemainingSeconds] = useState(25 * 60)
   const [sound, setSound] = useState('white_noise')
   const [volume, setVolume] = useState(50)
+  const [stars, setStars] = useState(0)
 
   useEffect(() => {
     if (!started) return
@@ -22,8 +24,15 @@ function App(): React.JSX.Element {
     return createAmbientSound(sound as AmbientSound, volume)
   }, [sound, started, volume])
 
+  useEffect(() => {
+    if (started && remainingSeconds === 0) {
+      setStars((value) => value + 1)
+      setStarted(false)
+    }
+  }, [remainingSeconds, started])
+
   if (!started) {
-    return <main className="start-screen"><Companion state="idle" /><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button><TodayBoard initialTasks={[]} /></main>
+    return <main className="start-screen"><Companion state={stars > 0 ? 'celebrate' : 'idle'} /><StudyCorner stars={stars} /><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button><TodayBoard initialTasks={[]} /></main>
   }
 
   const clock = `${Math.floor(remainingSeconds / 60).toString().padStart(2, '0')}:${(remainingSeconds % 60).toString().padStart(2, '0')}`

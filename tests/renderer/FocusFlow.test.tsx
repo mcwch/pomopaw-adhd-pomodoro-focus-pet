@@ -24,6 +24,15 @@ describe('focus flow', () => {
     expect(screen.getByText('24:59')).toBeTruthy()
   })
 
+  it('awards a focus star only when the full session ends', () => {
+    vi.useFakeTimers()
+    render(<App />)
+    fireEvent.change(screen.getByLabelText('What do you want to move forward right now?'), { target: { value: 'Outline my report' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
+    act(() => vi.advanceTimersByTime(25 * 60 * 1000))
+    expect(screen.getByText(/1 focus stars/)).toBeTruthy()
+  })
+
   it('asks before recording an early end', async () => {
     const user = userEvent.setup()
     render(<App />)
