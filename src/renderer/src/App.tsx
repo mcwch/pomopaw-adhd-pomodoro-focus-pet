@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createAmbientSound, type AmbientSound } from './audio'
+import TodayBoard from './components/TodayBoard'
 
 function App(): React.JSX.Element {
   const [task, setTask] = useState('')
@@ -21,7 +22,7 @@ function App(): React.JSX.Element {
   }, [sound, started, volume])
 
   if (!started) {
-    return <main className="start-screen"><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button></main>
+    return <main className="start-screen"><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button><TodayBoard initialTasks={[]} /></main>
   }
 
   const clock = `${Math.floor(remainingSeconds / 60).toString().padStart(2, '0')}:${(remainingSeconds % 60).toString().padStart(2, '0')}`

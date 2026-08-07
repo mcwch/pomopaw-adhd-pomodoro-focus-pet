@@ -6,5 +6,6 @@ describe('App', () => {
   it('shows one task prompt before focus starts', () => {
     render(<App />)
     expect(screen.getByLabelText('What do you want to move forward right now?')).toBeTruthy()
+    expect(screen.getByText('0 of 3 active tasks')).toBeTruthy()
   })
 })
