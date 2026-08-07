@@ -11,4 +11,12 @@ describe('TodayBoard', () => {
     expect(screen.getByText('Completed today: Outline report')).toBeTruthy()
     expect(screen.getByText('1 of 3 active tasks')).toBeTruthy()
   })
+
+  it('adds an inbox task into an available Today slot', async () => {
+    const user = userEvent.setup()
+    render(<TodayBoard initialTasks={[]} initialInbox={[{ id: 'c', title: 'Prepare slides' }]} />)
+    await user.click(screen.getByRole('button', { name: 'Add Prepare slides to Today' }))
+    expect(screen.getByText('1 of 3 active tasks')).toBeTruthy()
+    expect(screen.getByText('Prepare slides')).toBeTruthy()
+  })
 })
