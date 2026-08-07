@@ -41,6 +41,7 @@ describe('focus flow', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
     act(() => vi.advanceTimersByTime(25 * 60 * 1000))
     expect(screen.getByText(/1 focus stars/)).toBeTruthy()
+    expect(screen.getByText('Take a 5 minute break')).toBeTruthy()
   })
 
   it('asks before recording an early end', async () => {

@@ -16,6 +16,7 @@ function App(): React.JSX.Element {
   const [stars, setStars] = useState(0)
   const [todayTasks, setTodayTasks] = useState<TodayTask[]>([])
   const [paused, setPaused] = useState(false)
+  const [onBreak, setOnBreak] = useState(false)
 
   useEffect(() => {
     if (!started || paused) return
@@ -32,8 +33,13 @@ function App(): React.JSX.Element {
     if (started && remainingSeconds === 0) {
       setStars((value) => value + 1)
       setStarted(false)
+      setOnBreak(true)
     }
   }, [remainingSeconds, started])
+
+  if (onBreak) {
+    return <main className="start-screen"><Companion state="break" /><StudyCorner stars={stars} /><p className="eyebrow">SHORT BREAK</p><h1>Take a 5 minute break</h1><p>Stretch, drink water, or look away from the screen.</p><button onClick={() => setOnBreak(false)}>Back when ready</button></main>
+  }
 
   if (!started) {
     return <main className="start-screen"><Companion state={stars > 0 ? 'celebrate' : 'idle'} /><StudyCorner stars={stars} /><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { if (!todayTasks.some(({ title }) => title === task) && todayTasks.length < 3) setTodayTasks((tasks) => [...tasks, { id: crypto.randomUUID(), title: task }]); setRemainingSeconds(25 * 60); setPaused(false); setStarted(true) }}>Start 25 minutes</button><ChooseHelp tasks={todayTasks.map((item) => ({ ...item, status: 'today', energy: 'low' as const, completedPomodoros: 0 }))} /><TodayBoard initialTasks={todayTasks} /></main>
