@@ -40,4 +40,14 @@ describe('focus flow', () => {
     await user.selectOptions(screen.getByLabelText('Ambient sound'), 'rain')
     expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('rain')
   })
+
+  it('lets the user adjust ambient volume during focus', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
+    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
+    await user.clear(screen.getByLabelText('Ambient volume'))
+    await user.type(screen.getByLabelText('Ambient volume'), '35')
+    expect((screen.getByLabelText('Ambient volume') as HTMLInputElement).value).toBe('35')
+  })
 })
