@@ -40,6 +40,8 @@ describe('focus flow', () => {
     await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
     await user.click(screen.getByRole('button', { name: 'End early' }))
     expect(screen.getByRole('dialog')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Record and end' }))
+    expect(screen.getByText('Outline my report')).toBeTruthy()
   })
 
   it('lets the user select an ambient sound during focus', async () => {
