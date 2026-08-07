@@ -2,7 +2,10 @@ import { contextBridge, ipcRenderer } from 'electron'
 import type { FocusAppApi } from '../shared/ipc'
 
 // Custom APIs for renderer
-const focusApp: FocusAppApi = { appReady: () => ipcRenderer.invoke('app:ready', {}) }
+const focusApp: FocusAppApi = {
+  appReady: () => ipcRenderer.invoke('app:ready', {}),
+  ollamaStatus: () => ipcRenderer.invoke('ollama:status')
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

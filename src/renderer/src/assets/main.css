@@ -15,4 +15,7 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .sound-control { color: #b8ccff; display: grid; gap: 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
 select { background: #1d2b52; border: 1px solid #4b6193; border-radius: 10px; color: #f4f7ff; padding: 8px; text-transform: none; }
 [role='dialog'] { background: #263965; border-radius: 20px; max-width: 440px; padding: 24px; }
+.local-ai-status { background: #1d2b52; border: 1px solid #4b6193; border-radius: 16px; display: grid; gap: 6px; max-width: 440px; padding: 14px 16px; color: #dbe6ff; }
+.local-ai-status span { color: #b8ccff; font-size: .9rem; }
+.local-ai-status code { color: #fff2b0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

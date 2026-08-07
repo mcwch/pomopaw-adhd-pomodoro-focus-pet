@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { appReadyRequestSchema } from '../shared/ipc'
 import { createTrayController } from './tray'
+import { detectLocalOllama } from './ollama'
 
 let tray: Tray | undefined
 
@@ -62,6 +63,8 @@ app.whenReady().then(() => {
     appReadyRequestSchema.parse(request)
     return { applicationName: 'Focus Companion' }
   })
+
+  ipcMain.handle('ollama:status', () => detectLocalOllama())
 
   createWindow()
 
