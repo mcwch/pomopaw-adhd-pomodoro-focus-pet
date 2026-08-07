@@ -5,7 +5,12 @@ function LocalAiStatus(): React.JSX.Element {
   const [status, setStatus] = useState<OllamaStatusResponse | null>(null)
 
   useEffect(() => {
-    window.focusApp?.ollamaStatus().then(setStatus).catch(() => setStatus({ available: false, models: [] }))
+    const request = window.focusApp?.ollamaStatus()
+    if (!request) {
+      setStatus({ available: false, models: [] })
+      return
+    }
+    request.then(setStatus).catch(() => setStatus({ available: false, models: [] }))
   }, [])
 
   if (!status) return <p className="local-ai-status">Checking optional local AI…</p>

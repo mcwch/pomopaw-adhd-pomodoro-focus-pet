@@ -15,6 +15,16 @@ describe('focus flow', () => {
     expect(screen.getByText('Studying with you')).toBeTruthy()
   })
 
+  it('shows the desktop companion when focus starts', async () => {
+    const user = userEvent.setup()
+    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn(), ollamaFirstStep: vi.fn(), setOverlayVisible: vi.fn() }
+    render(<App />)
+    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
+    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
+
+    expect(window.focusApp.setOverlayVisible).toHaveBeenCalledWith({ visible: true, task: 'Outline my report' })
+  })
+
   it('counts down after a focus session starts', () => {
     vi.useFakeTimers()
     render(<App />)

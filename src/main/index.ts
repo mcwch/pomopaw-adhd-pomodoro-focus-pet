@@ -2,11 +2,13 @@ import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { appReadyRequestSchema, ollamaFirstStepRequestSchema } from '../shared/ipc'
+import { appReadyRequestSchema, ollamaFirstStepRequestSchema, overlayVisibilityRequestSchema } from '../shared/ipc'
 import { createTrayController } from './tray'
 import { detectLocalOllama, getFirstStepFromLocalOllama } from './ollama'
+import { createOverlayController, overlayWindowOptions } from './windows'
 
 let tray: Tray | undefined
+let overlayController: ReturnType<typeof createOverlayController> | undefined
 
 function createWindow(): void {
   // Create the browser window.
@@ -70,7 +72,32 @@ app.whenReady().then(() => {
     return getFirstStepFromLocalOllama(task).then((suggestion) => ({ suggestion }))
   })
 
+  ipcMain.handle('overlay:visibility', (_event, request: unknown) => {
+    const visibility = overlayVisibilityRequestSchema.parse(request)
+    if (visibility.visible) overlayController?.show(visibility.task)
+    else overlayController?.hide()
+  })
+
   createWindow()
+
+  overlayController = createOverlayController((task) => {
+    const overlayWindow = new BrowserWindow({
+      ...overlayWindowOptions(),
+      show: false,
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        contextIsolation: true,
+        nodeIntegration: false,
+        sandbox: false
+      }
+    })
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      void overlayWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}?overlay=1&task=${encodeURIComponent(task)}`)
+    } else {
+      void overlayWindow.loadFile(join(__dirname, '../renderer/index.html'), { query: { overlay: '1', task } })
+    }
+    return overlayWindow
+  })
 
   tray = new Tray(icon)
   tray.setToolTip('Focus Companion')
