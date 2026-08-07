@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createAmbientSound, type AmbientSound } from './audio'
 import TodayBoard from './components/TodayBoard'
-import lion from './assets/lion/blue-maned-study-lion.png'
+import Companion from './components/Companion'
 
 function App(): React.JSX.Element {
   const [task, setTask] = useState('')
@@ -23,11 +23,11 @@ function App(): React.JSX.Element {
   }, [sound, started, volume])
 
   if (!started) {
-    return <main className="start-screen"><img className="lion" src={lion} alt="Blue-maned lion companion studying" /><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button><TodayBoard initialTasks={[]} /></main>
+    return <main className="start-screen"><Companion state="idle" /><p className="eyebrow">FOCUS COMPANION</p><h1>One small step is enough.</h1><label htmlFor="task">What do you want to move forward right now?</label><input id="task" value={task} onChange={(event) => setTask(event.target.value)} placeholder="e.g. outline my report" /><button disabled={!task.trim()} onClick={() => { setRemainingSeconds(25 * 60); setStarted(true) }}>Start 25 minutes</button><TodayBoard initialTasks={[]} /></main>
   }
 
   const clock = `${Math.floor(remainingSeconds / 60).toString().padStart(2, '0')}:${(remainingSeconds % 60).toString().padStart(2, '0')}`
-  return <main className="timer-screen"><p className="eyebrow">FOCUSING ON</p><h1>{task}</h1><time>{clock}</time><label className="sound-control">Ambient sound<select aria-label="Ambient sound" value={sound} onChange={(event) => setSound(event.target.value)}><option value="white_noise">White noise</option><option value="rain">Rain</option><option value="cafe">Cafe</option><option value="forest">Forest</option></select></label><label className="sound-control">Ambient volume<input aria-label="Ambient volume" type="number" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} /></label>{confirmingEnd ? <section role="dialog"><p>Record and end? This will save your focused minutes but not count as a completed Pomodoro.</p><button onClick={() => setStarted(false)}>Record and end</button><button onClick={() => setConfirmingEnd(false)}>Keep focusing</button></section> : <button className="quiet" onClick={() => setConfirmingEnd(true)}>End early</button>}</main>
+  return <main className="timer-screen"><Companion state="focus" /><p className="eyebrow">FOCUSING ON</p><h1>{task}</h1><time>{clock}</time><label className="sound-control">Ambient sound<select aria-label="Ambient sound" value={sound} onChange={(event) => setSound(event.target.value)}><option value="white_noise">White noise</option><option value="rain">Rain</option><option value="cafe">Cafe</option><option value="forest">Forest</option></select></label><label className="sound-control">Ambient volume<input aria-label="Ambient volume" type="number" min="0" max="100" value={volume} onChange={(event) => setVolume(Number(event.target.value))} /></label>{confirmingEnd ? <section role="dialog"><p>Record and end? This will save your focused minutes but not count as a completed Pomodoro.</p><button onClick={() => setStarted(false)}>Record and end</button><button onClick={() => setConfirmingEnd(false)}>Keep focusing</button></section> : <button className="quiet" onClick={() => setConfirmingEnd(true)}>End early</button>}</main>
 }
 
 export default App

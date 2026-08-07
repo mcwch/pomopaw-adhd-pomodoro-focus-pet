@@ -12,6 +12,7 @@ describe('focus flow', () => {
     await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
     expect(screen.getByText('Outline my report')).toBeTruthy()
     expect(screen.getByText('25:00')).toBeTruthy()
+    expect(screen.getByText('Studying with you')).toBeTruthy()
   })
 
   it('counts down after a focus session starts', () => {
