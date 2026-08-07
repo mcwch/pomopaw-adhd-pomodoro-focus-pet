@@ -24,6 +24,16 @@ describe('focus flow', () => {
     expect(screen.getByText('24:59')).toBeTruthy()
   })
 
+  it('keeps remaining time unchanged while paused', () => {
+    vi.useFakeTimers()
+    render(<App />)
+    fireEvent.change(screen.getByLabelText('What do you want to move forward right now?'), { target: { value: 'Outline my report' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Pause timer' }))
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(screen.getByText('25:00')).toBeTruthy()
+  })
+
   it('awards a focus star only when the full session ends', () => {
     vi.useFakeTimers()
     render(<App />)
