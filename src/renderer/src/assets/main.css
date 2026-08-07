@@ -11,5 +11,7 @@ button { border: 0; border-radius: 999px; background: #7eabff; color: #101936; c
 button:disabled { cursor: not-allowed; opacity: .45; }
 .timer-screen time { color: #b8ccff; font-size: clamp(5rem, 20vw, 12rem); font-variant-numeric: tabular-nums; font-weight: 800; }
 .quiet { background: transparent; border: 1px solid #4b6193; color: #dbe6ff; }
+.sound-control { color: #b8ccff; display: grid; gap: 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+select { background: #1d2b52; border: 1px solid #4b6193; border-radius: 10px; color: #f4f7ff; padding: 8px; text-transform: none; }
 [role='dialog'] { background: #263965; border-radius: 20px; max-width: 440px; padding: 24px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

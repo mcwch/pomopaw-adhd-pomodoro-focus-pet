@@ -5,6 +5,7 @@ function App(): React.JSX.Element {
   const [started, setStarted] = useState(false)
   const [confirmingEnd, setConfirmingEnd] = useState(false)
   const [remainingSeconds, setRemainingSeconds] = useState(25 * 60)
+  const [sound, setSound] = useState('white_noise')
 
   useEffect(() => {
     if (!started) return
@@ -17,7 +18,7 @@ function App(): React.JSX.Element {
   }
 
   const clock = `${Math.floor(remainingSeconds / 60).toString().padStart(2, '0')}:${(remainingSeconds % 60).toString().padStart(2, '0')}`
-  return <main className="timer-screen"><p className="eyebrow">FOCUSING ON</p><h1>{task}</h1><time>{clock}</time>{confirmingEnd ? <section role="dialog"><p>Record and end? This will save your focused minutes but not count as a completed Pomodoro.</p><button onClick={() => setStarted(false)}>Record and end</button><button onClick={() => setConfirmingEnd(false)}>Keep focusing</button></section> : <button className="quiet" onClick={() => setConfirmingEnd(true)}>End early</button>}</main>
+  return <main className="timer-screen"><p className="eyebrow">FOCUSING ON</p><h1>{task}</h1><time>{clock}</time><label className="sound-control">Ambient sound<select aria-label="Ambient sound" value={sound} onChange={(event) => setSound(event.target.value)}><option value="white_noise">White noise</option><option value="rain">Rain</option><option value="cafe">Cafe</option><option value="forest">Forest</option></select></label>{confirmingEnd ? <section role="dialog"><p>Record and end? This will save your focused minutes but not count as a completed Pomodoro.</p><button onClick={() => setStarted(false)}>Record and end</button><button onClick={() => setConfirmingEnd(false)}>Keep focusing</button></section> : <button className="quiet" onClick={() => setConfirmingEnd(true)}>End early</button>}</main>
 }
 
 export default App

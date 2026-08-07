@@ -31,4 +31,13 @@ describe('focus flow', () => {
     await user.click(screen.getByRole('button', { name: 'End early' }))
     expect(screen.getByRole('dialog')).toBeTruthy()
   })
+
+  it('lets the user select an ambient sound during focus', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
+    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
+    await user.selectOptions(screen.getByLabelText('Ambient sound'), 'rain')
+    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('rain')
+  })
 })
