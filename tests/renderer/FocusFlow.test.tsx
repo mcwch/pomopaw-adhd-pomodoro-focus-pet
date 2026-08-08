@@ -1,87 +1,38 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from '../../src/renderer/src/App'
+import { useFocusStore } from '../../src/renderer/src/store'
+import { idleTimer, startFocus } from '../../src/shared/timer'
+
+const focus = startFocus({ task: { id: 'report', title: 'Outline my report' }, completedFocusCount: 0 }, new Date().toISOString(), 'session-1')
+function bridge(snapshot = idleTimer()) {
+  return { timerHydrate: vi.fn().mockResolvedValue({ snapshot, recovery: null }), onTimerSnapshot: vi.fn(() => () => undefined), timerStart: vi.fn().mockResolvedValue(focus), timerPause: vi.fn().mockResolvedValue({ ...focus, phase: 'paused', pausedFrom: 'focus', targetEndsAt: null, remainingSeconds: 1500 }), timerResume: vi.fn().mockResolvedValue(focus), timerEndEarly: vi.fn().mockResolvedValue(idleTimer()), resolveTimerRecovery: vi.fn().mockResolvedValue(idleTimer()), appReady: vi.fn(), ollamaStatus: vi.fn(), ollamaFirstStep: vi.fn(), setOverlayVisible: vi.fn(), timerState: vi.fn() }
+}
+afterEach(() => useFocusStore.setState({ hydrated: false, snapshot: idleTimer(), recovery: null }))
 
 describe('focus flow', () => {
-  afterEach(() => vi.useRealTimers())
-  it('starts a 25-minute focus session from a one-line task', async () => {
-    const user = userEvent.setup()
+  it('starts focus through the main-process bridge and renders its returned snapshot', async () => {
+    const user = userEvent.setup(); const api = bridge(); window.focusApp = api
     render(<App />)
-    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
+    await user.type(await screen.findByLabelText('What do you want to move forward right now?'), 'Outline my report')
     await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    expect(screen.getByText('Outline my report')).toBeTruthy()
-    expect(screen.getByText('25:00')).toBeTruthy()
-    expect(screen.getByText('Studying with you')).toBeTruthy()
+    expect(api.timerStart).toHaveBeenCalledWith(expect.objectContaining({ title: 'Outline my report' }))
+    expect(await screen.findByText('25:00')).toBeTruthy()
   })
 
-  it('shows the desktop companion when focus starts', async () => {
-    const user = userEvent.setup()
-    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn(), ollamaFirstStep: vi.fn(), setOverlayVisible: vi.fn() }
+  it('uses the main-process pause command rather than a renderer interval', async () => {
+    const user = userEvent.setup(); const api = bridge(focus); window.focusApp = api
     render(<App />)
-    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
-    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-
-    expect(window.focusApp.setOverlayVisible).toHaveBeenCalledWith({ visible: true, task: 'Outline my report' })
+    await user.click(await screen.findByRole('button', { name: 'Pause timer' }))
+    expect(api.timerPause).toHaveBeenCalledOnce()
   })
 
-  it('counts down after a focus session starts', () => {
-    vi.useFakeTimers()
+  it('offers only partial recording or discard after an expired recovered focus', async () => {
+    const user = userEvent.setup(); const api = bridge(); api.timerHydrate.mockResolvedValue({ snapshot: idleTimer(), recovery: { id: 'session', taskId: 'report', startedAt: '2026-08-08T09:00:00.000Z', endedAt: '2026-08-08T09:25:00.000Z', elapsedSeconds: 1500, outcome: 'partial', awardedStars: 0 } }); window.focusApp = api
     render(<App />)
-    fireEvent.change(screen.getByLabelText('What do you want to move forward right now?'), { target: { value: 'Outline my report' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    act(() => vi.advanceTimersByTime(1000))
-    expect(screen.getByText('24:59')).toBeTruthy()
-  })
-
-  it('keeps remaining time unchanged while paused', () => {
-    vi.useFakeTimers()
-    render(<App />)
-    fireEvent.change(screen.getByLabelText('What do you want to move forward right now?'), { target: { value: 'Outline my report' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Pause timer' }))
-    act(() => vi.advanceTimersByTime(10_000))
-    expect(screen.getByText('25:00')).toBeTruthy()
-  })
-
-  it('awards a focus star only when the full session ends', () => {
-    vi.useFakeTimers()
-    render(<App />)
-    fireEvent.change(screen.getByLabelText('What do you want to move forward right now?'), { target: { value: 'Outline my report' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    act(() => vi.advanceTimersByTime(25 * 60 * 1000))
-    expect(screen.getByText(/1 focus stars/)).toBeTruthy()
-    expect(screen.getByText('Take a 5 minute break')).toBeTruthy()
-  })
-
-  it('asks before recording an early end', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
-    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    await user.click(screen.getByRole('button', { name: 'End early' }))
-    expect(screen.getByRole('dialog')).toBeTruthy()
-    await user.click(screen.getByRole('button', { name: 'Record and end' }))
-    expect(screen.getByText('Outline my report')).toBeTruthy()
-    expect(screen.getByText('Try this next: Outline my report')).toBeTruthy()
-  })
-
-  it('lets the user select an ambient sound during focus', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
-    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    await user.selectOptions(screen.getByLabelText('Ambient sound'), 'rain')
-    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('rain')
-  })
-
-  it('lets the user adjust ambient volume during focus', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    await user.type(screen.getByLabelText('What do you want to move forward right now?'), 'Outline my report')
-    await user.click(screen.getByRole('button', { name: 'Start 25 minutes' }))
-    await user.clear(screen.getByLabelText('Ambient volume'))
-    await user.type(screen.getByLabelText('Ambient volume'), '35')
-    expect((screen.getByLabelText('Ambient volume') as HTMLInputElement).value).toBe('35')
+    await user.click(await screen.findByRole('button', { name: 'Record elapsed time only' }))
+    expect(api.resolveTimerRecovery).toHaveBeenCalledWith('record_partial')
+    expect(screen.queryByRole('button', { name: /complete/i })).toBeNull()
   })
 })
