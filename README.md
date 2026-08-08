@@ -1,6 +1,10 @@
-# focus-companion-app
+# Focus Companion
 
-An Electron application with React and TypeScript
+A local-first Windows focus companion: a reliable 25/5/15 Pomodoro timer, a blue-maned lion desktop companion, optional ambient sound, and gentle game progress that rewards only verified full focus sessions.
+
+## Reliable timer checks
+
+Run the focused reliability suite with `npm run test:reliable-timer`. Before creating a Windows installer, follow [the manual QA checklist](docs/manual-qa-reliable-timer.md).
 
 ## Recommended IDE Setup
 

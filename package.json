@@ -8,6 +8,7 @@
   "scripts": {
     "format": "prettier --write .",
     "test": "vitest",
+    "test:reliable-timer": "vitest tests/unit/timer.test.ts tests/unit/rewards.test.ts tests/unit/persistence.test.ts tests/unit/recovery.test.ts tests/unit/timer-controller.test.ts tests/unit/timer-ipc.test.ts tests/unit/ipc.test.ts tests/unit/tray.test.ts tests/unit/windows.test.ts tests/renderer/App.test.tsx tests/renderer/FocusFlow.test.tsx tests/renderer/OverlayApp.test.tsx",
     "lint": "eslint --cache .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
