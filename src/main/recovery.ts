@@ -1,13 +1,15 @@
-import { FOCUS_SECONDS, type TimerSnapshot } from '../shared/timer'
+import { FOCUS_SECONDS, idleTimer, type SessionRecord, type TimerSnapshot } from '../shared/timer'
 
 export type RecoveryResult =
-  | { kind: 'active'; elapsedSeconds: number }
-  | { kind: 'expired_focus'; elapsedSeconds: number; requiresUserAcknowledgement: true; awardedCompletion: false }
+  | { kind: 'resume'; snapshot: TimerSnapshot }
+  | { kind: 'idle'; snapshot: TimerSnapshot }
+  | { kind: 'expired_focus'; session: SessionRecord }
 
 export function recoverTimer(snapshot: TimerSnapshot, now: string): RecoveryResult {
-  const elapsedSeconds = Math.max(0, Math.floor((Date.parse(now) - Date.parse(snapshot.startedAt ?? now)) / 1000))
-  if (snapshot.phase === 'focus' && elapsedSeconds >= FOCUS_SECONDS) {
-    return { kind: 'expired_focus', elapsedSeconds, requiresUserAcknowledgement: true, awardedCompletion: false }
-  }
-  return { kind: 'active', elapsedSeconds }
+  if (snapshot.phase === 'paused') return { kind: 'resume', snapshot }
+  if (snapshot.phase === 'idle') return { kind: 'idle', snapshot }
+  const remaining = Math.max(0, Math.ceil((Date.parse(snapshot.targetEndsAt ?? now) - Date.parse(now)) / 1000))
+  if (remaining > 0) return { kind: 'resume', snapshot: { ...snapshot, remainingSeconds: remaining } }
+  if (snapshot.phase !== 'focus') return { kind: 'idle', snapshot: idleTimer(snapshot.completedFocusCount) }
+  return { kind: 'expired_focus', session: { id: snapshot.sessionId!, taskId: snapshot.task?.id ?? null, startedAt: snapshot.startedAt!, endedAt: now, elapsedSeconds: FOCUS_SECONDS, outcome: 'partial', awardedStars: 0 } }
 }
