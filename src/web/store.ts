@@ -3,7 +3,7 @@ import { idleTimer, type SessionRecord, type TimerSnapshot } from '../shared/tim
 import { createBrowserRepository } from './storage'
 import { createTimerService } from './timer-service'
 
-const service = createTimerService({ repository: createBrowserRepository(), now: () => new Date().toISOString(), makeId: crypto.randomUUID })
+const service = createTimerService({ repository: createBrowserRepository(), now: () => new Date().toISOString(), makeId: () => crypto.randomUUID() })
 let unsubscribe: (() => void) | null = null
 type Store = { hydrated: boolean; snapshot: TimerSnapshot; recovery: SessionRecord | null; stars: number; hydrate(): Promise<void>; start(title: string): Promise<void>; pause(): Promise<void>; resume(): Promise<void>; endEarly(): Promise<void>; tick(): Promise<void>; resolveRecovery(action: 'record_partial' | 'discard'): Promise<void> }
 export const useStudyStore = create<Store>((set) => ({ hydrated: false, snapshot: idleTimer(), recovery: null, stars: 0,

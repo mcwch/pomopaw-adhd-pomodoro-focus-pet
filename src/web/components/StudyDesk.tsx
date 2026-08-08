@@ -19,7 +19,7 @@ export default function StudyDesk({ snapshot, stars, onStart, onPause, onResume,
     return () => window.clearTimeout(timeout)
   }, [snapshot])
   const addTask = (title: string): boolean => {
-    const result = addTodayTask(tasks, title, crypto.randomUUID)
+    const result = addTodayTask(tasks, title, () => crypto.randomUUID())
     if (result.added) { setTasks(result.tasks); saveTodayTasks(result.tasks) }
     return result.added
   }
