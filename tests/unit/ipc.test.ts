@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import { appReadyRequestSchema, overlayVisibilityRequestSchema, ollamaFirstStepRequestSchema, ollamaFirstStepResponseSchema, ollamaStatusResponseSchema } from '../../src/shared/ipc'
+import { appReadyRequestSchema, timerStartRequestSchema, recoveryActionRequestSchema, overlayVisibilityRequestSchema, ollamaFirstStepRequestSchema, ollamaFirstStepResponseSchema, ollamaStatusResponseSchema } from '../../src/shared/ipc'
 describe('app-ready IPC request', () => { it('rejects renderer data outside the empty request contract', () => { expect(appReadyRequestSchema.safeParse({}).success).toBe(true); expect(appReadyRequestSchema.safeParse({ unexpected: true }).success).toBe(false) }) })
 
 describe('local AI IPC response', () => {
   it('only accepts a simple availability and model list response', () => {
     expect(ollamaStatusResponseSchema.safeParse({ available: true, models: ['qwen2.5:3b'] }).success).toBe(true)
     expect(ollamaStatusResponseSchema.safeParse({ available: true, models: [3] }).success).toBe(false)
+  })
+})
+
+describe('timer IPC contract', () => {
+  it('accepts a valid task start and only conservative recovery actions', () => {
+    expect(timerStartRequestSchema.safeParse({ task: { id: 'report', title: 'Draft report' } }).success).toBe(true)
+    expect(timerStartRequestSchema.safeParse({ task: { id: 'report', title: '' } }).success).toBe(false)
+    expect(recoveryActionRequestSchema.safeParse({ action: 'record_partial' }).success).toBe(true)
+    expect(recoveryActionRequestSchema.safeParse({ action: 'complete' }).success).toBe(false)
   })
 })
 

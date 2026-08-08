@@ -1,14 +1,19 @@
 import { app, shell, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 import { join } from 'path'
+import { randomUUID } from 'node:crypto'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { appReadyRequestSchema, ollamaFirstStepRequestSchema, overlayVisibilityRequestSchema } from '../shared/ipc'
 import { createTrayController } from './tray'
 import { detectLocalOllama, getFirstStepFromLocalOllama } from './ollama'
 import { createOverlayController, overlayWindowOptions } from './windows'
+import { StateRepository } from './persistence'
+import { TimerController } from './timer-controller'
+import { registerTimerIpc } from './timer-ipc'
 
 let tray: Tray | undefined
 let overlayController: ReturnType<typeof createOverlayController> | undefined
+let timerController: TimerController | undefined
 
 function createWindow(): void {
   // Create the browser window.
@@ -77,6 +82,16 @@ app.whenReady().then(() => {
     if (visibility.visible) overlayController?.show(visibility.task)
     else overlayController?.hide()
   })
+
+  timerController = new TimerController({
+    repository: new StateRepository(app.getPath('userData')),
+    now: () => new Date().toISOString(),
+    makeId: randomUUID,
+    publish: (snapshot) => BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('timer:snapshot', snapshot))
+  })
+  void timerController.hydrate()
+  registerTimerIpc({ handle: ipcMain.handle.bind(ipcMain), controller: timerController })
+  setInterval(() => { void timerController?.tick().catch((error) => console.error('Timer tick failed', error)) }, 1000)
 
   createWindow()
 

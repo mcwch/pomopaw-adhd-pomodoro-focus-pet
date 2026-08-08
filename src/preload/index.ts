@@ -6,7 +6,17 @@ const focusApp: FocusAppApi = {
   appReady: () => ipcRenderer.invoke('app:ready', {}),
   ollamaStatus: () => ipcRenderer.invoke('ollama:status'),
   ollamaFirstStep: (task) => ipcRenderer.invoke('ollama:first-step', { task }),
-  setOverlayVisible: (request) => ipcRenderer.invoke('overlay:visibility', request)
+  setOverlayVisible: (request) => ipcRenderer.invoke('overlay:visibility', request),
+  timerState: () => ipcRenderer.invoke('timer:state', {}),
+  timerStart: (task) => ipcRenderer.invoke('timer:start', { task }),
+  timerPause: () => ipcRenderer.invoke('timer:pause', {}),
+  timerResume: () => ipcRenderer.invoke('timer:resume', {}),
+  timerEndEarly: () => ipcRenderer.invoke('timer:end-early', {}),
+  onTimerSnapshot: (listener) => {
+    const callback = (_event: Electron.IpcRendererEvent, snapshot: Parameters<typeof listener>[0]) => listener(snapshot)
+    ipcRenderer.on('timer:snapshot', callback)
+    return () => ipcRenderer.removeListener('timer:snapshot', callback)
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
