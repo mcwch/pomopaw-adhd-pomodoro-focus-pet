@@ -87,7 +87,10 @@ app.whenReady().then(async () => {
     repository: new StateRepository(app.getPath('userData')),
     now: () => new Date().toISOString(),
     makeId: randomUUID,
-    publish: (snapshot) => BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('timer:snapshot', snapshot))
+    publish: (snapshot) => {
+      overlayController?.sync(snapshot)
+      BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('timer:snapshot', snapshot))
+    }
   })
   await timerController.hydrate()
   registerTimerIpc({ handle: ipcMain.handle.bind(ipcMain), controller: timerController })
@@ -113,11 +116,13 @@ app.whenReady().then(async () => {
     }
     return overlayWindow
   })
+  void timerController.getSnapshot().then((snapshot) => overlayController?.sync(snapshot))
 
   tray = new Tray(icon)
   tray.setToolTip('Focus Companion')
   tray.setContextMenu(Menu.buildFromTemplate([
     { label: 'Show Focus Companion', click: () => BrowserWindow.getAllWindows()[0]?.show() },
+    { label: 'Hide companion', click: () => overlayController?.hide() },
     { label: 'Quit', click: () => app.quit() }
   ]))
   tray.on('click', () => BrowserWindow.getAllWindows()[0]?.show())
