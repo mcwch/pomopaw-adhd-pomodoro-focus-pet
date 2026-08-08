@@ -5,12 +5,12 @@ import type { AppState, FocusHistory } from '../shared/state'
 
 type Repository = { loadState(): Promise<AppState>; saveState(state: AppState): Promise<void>; loadHistory(): Promise<FocusHistory>; appendSession(session: SessionRecord): Promise<void> }
 export interface HydrationResult { snapshot: TimerSnapshot; recovery: SessionRecord | null }
-export interface TimerService { hydrate(): Promise<HydrationResult>; start(task: { id: string; title: string }, at?: string): Promise<TimerSnapshot>; pause(): Promise<TimerSnapshot>; resume(): Promise<TimerSnapshot>; endEarly(): Promise<TimerSnapshot>; recordRecoveredPartial(): Promise<TimerSnapshot>; discardRecoveredSession(): Promise<TimerSnapshot>; tick(): Promise<TimerSnapshot>; subscribe(listener: (snapshot: TimerSnapshot) => void): () => void }
+export interface TimerService { hydrate(): Promise<HydrationResult>; getState(): Promise<AppState>; start(task: { id: string; title: string }, at?: string): Promise<TimerSnapshot>; pause(): Promise<TimerSnapshot>; resume(): Promise<TimerSnapshot>; endEarly(): Promise<TimerSnapshot>; recordRecoveredPartial(): Promise<TimerSnapshot>; discardRecoveredSession(): Promise<TimerSnapshot>; tick(): Promise<TimerSnapshot>; subscribe(listener: (snapshot: TimerSnapshot, state: AppState) => void): () => void }
 
 export function createTimerService(options: { repository: Repository; now: () => string; makeId: () => string }): TimerService {
-  let state: AppState | undefined; let recovery: SessionRecord | null = null; const listeners = new Set<(snapshot: TimerSnapshot) => void>()
+  let state: AppState | undefined; let recovery: SessionRecord | null = null; const listeners = new Set<(snapshot: TimerSnapshot, state: AppState) => void>()
   const ready = async () => { if (!state) await hydrate(); return state! }
-  const publish = () => listeners.forEach((listener) => listener(state!.timer))
+  const publish = () => listeners.forEach((listener) => listener(state!.timer, state!))
   const commit = async () => { await options.repository.saveState(state!); publish() }
   const settle = async (session: SessionRecord) => { await options.repository.appendSession(session); state!.rewards = applySessionOutcome(state!.rewards, session) }
   const hydrate = async (): Promise<HydrationResult> => {
@@ -21,6 +21,7 @@ export function createTimerService(options: { repository: Repository; now: () =>
   }
   return {
     hydrate,
+    async getState() { return await ready() },
     async start(task, at = options.now()) { const current = await ready(); current.timer = startFocus({ task, completedFocusCount: current.timer.completedFocusCount }, at, options.makeId()); await commit(); return current.timer },
     async pause() { const current = await ready(); current.timer = pauseTimer(current.timer, options.now()); await commit(); return current.timer },
     async resume() { const current = await ready(); current.timer = resumeTimer(current.timer, options.now()); await commit(); return current.timer },

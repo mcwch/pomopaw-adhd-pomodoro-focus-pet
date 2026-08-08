@@ -20,6 +20,14 @@ describe('browser timer service', () => {
     expect(published.at(-1)).toBe('short_break')
   })
 
+  it('makes the awarded star available to a client after a completed focus', async () => {
+    const service = createTimerService({ repository: repository(), now: () => '2026-08-08T09:25:00.000Z', makeId: () => 'session-1' })
+    await service.start({ id: 'report', title: 'Outline report' }, '2026-08-08T09:00:00.000Z')
+    await service.tick()
+
+    expect((await service.getState()).rewards.stars).toBe(1)
+  })
+
   it('requires confirmation before recording an expired recovered focus', async () => {
     const state = freshAppState(); state.timer = startFocus({ task: { id: 'report', title: 'Outline report' }, completedFocusCount: 0 }, '2026-08-08T09:00:00.000Z', 'recovered')
     const storage = repository(state)
