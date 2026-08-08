@@ -33,4 +33,25 @@ describe('timer IPC handlers', () => {
     expect(() => stateHandler({}, { phase: 'focus' })).toThrow()
     expect(getSnapshot).toHaveBeenCalledOnce()
   })
+
+  it('hydrates with an explicit recovery candidate rather than a completion decision', async () => {
+    const handle = vi.fn(); const hydrate = vi.fn(() => Promise.resolve({ snapshot: { phase: 'idle' }, recovery: { outcome: 'partial', awardedStars: 0 } }))
+    registerTimerIpc({ handle, controller: { hydrate } } as never)
+    const hydrateHandler = handle.mock.calls.find(([channel]) => channel === 'timer:hydrate')![1]
+
+    await expect(hydrateHandler({}, {})).resolves.toMatchObject({ recovery: { outcome: 'partial', awardedStars: 0 } })
+    expect(hydrate).toHaveBeenCalledOnce()
+  })
+
+  it('only delegates the two conservative recovery actions', async () => {
+    const handle = vi.fn(); const recordRecoveredPartial = vi.fn(() => Promise.resolve({ phase: 'idle' })); const discardRecoveredSession = vi.fn(() => Promise.resolve({ phase: 'idle' }))
+    registerTimerIpc({ handle, controller: { recordRecoveredPartial, discardRecoveredSession } } as never)
+    const recoveryHandler = handle.mock.calls.find(([channel]) => channel === 'timer:resolve-recovery')![1]
+
+    await recoveryHandler({}, { action: 'record_partial' })
+    await recoveryHandler({}, { action: 'discard' })
+    expect(recordRecoveredPartial).toHaveBeenCalledOnce()
+    expect(discardRecoveredSession).toHaveBeenCalledOnce()
+    expect(() => recoveryHandler({}, { action: 'complete' })).toThrow()
+  })
 })

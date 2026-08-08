@@ -1,9 +1,21 @@
 import { describe, expect, it, vi } from 'vitest'
 import { TimerController } from '../../src/main/timer-controller'
 import { freshAppState, freshFocusHistory } from '../../src/shared/state'
+import { startFocus } from '../../src/shared/timer'
 
 function repository() {
   let state = freshAppState(); let history = freshFocusHistory()
+  return { loadState: async () => state, saveState: async (next: typeof state) => { state = next }, loadHistory: async () => history, appendSession: async (session: (typeof history.sessions)[number]) => { history = { ...history, sessions: [...history.sessions, session] } }, get state() { return state }, get history() { return history } }
+}
+
+function expiredFocusRepository() {
+  const state = freshAppState()
+  state.timer = startFocus({ task: { id: 'report', title: 'Draft report' }, completedFocusCount: 0 }, '2026-08-08T09:00:00.000Z', 'recovered-session')
+  return repositoryFrom(state)
+}
+
+function repositoryFrom(initialState: ReturnType<typeof freshAppState>) {
+  let state = initialState; let history = freshFocusHistory()
   return { loadState: async () => state, saveState: async (next: typeof state) => { state = next }, loadHistory: async () => history, appendSession: async (session: (typeof history.sessions)[number]) => { history = { ...history, sessions: [...history.sessions, session] } }, get state() { return state }, get history() { return history } }
 }
 
@@ -53,5 +65,18 @@ describe('TimerController', () => {
     await controller.tick()
 
     expect(publish).not.toHaveBeenCalled()
+  })
+
+  it('only writes an expired recovered focus after the user records it as partial', async () => {
+    const storage = expiredFocusRepository(); const publish = vi.fn()
+    const controller = new TimerController({ repository: storage, now: () => '2026-08-08T10:00:00.000Z', makeId: () => 'unused', publish })
+
+    const recovery = await controller.hydrate()
+    expect(recovery).toMatchObject({ recovery: { outcome: 'partial', elapsedSeconds: 1500, awardedStars: 0 } })
+    expect(storage.history.sessions).toHaveLength(0)
+
+    await controller.recordRecoveredPartial()
+    expect(storage.history.sessions[0]).toMatchObject({ outcome: 'partial', awardedStars: 0 })
+    expect(storage.state.rewards.stars).toBe(0)
   })
 })

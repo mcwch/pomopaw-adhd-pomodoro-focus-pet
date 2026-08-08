@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { TimerSnapshot } from './timer'
+import type { SessionRecord, TimerSnapshot } from './timer'
 export const appReadyRequestSchema = z.object({}).strict()
 export const timerStartRequestSchema = z.object({ task: z.object({ id: z.string().min(1), title: z.string().trim().min(1).max(200) }).strict() }).strict()
 export const timerActionRequestSchema = z.object({}).strict()
@@ -24,9 +24,11 @@ export interface FocusAppApi {
   ollamaFirstStep(task: string): Promise<OllamaFirstStepResponse>
   setOverlayVisible(request: z.infer<typeof overlayVisibilityRequestSchema>): Promise<void>
   timerState(): Promise<TimerSnapshot>
+  timerHydrate(): Promise<{ snapshot: TimerSnapshot; recovery: SessionRecord | null }>
   timerStart(task: { id: string; title: string }): Promise<TimerSnapshot>
   timerPause(): Promise<TimerSnapshot>
   timerResume(): Promise<TimerSnapshot>
   timerEndEarly(): Promise<TimerSnapshot>
+  resolveTimerRecovery(action: z.infer<typeof recoveryActionRequestSchema>['action']): Promise<TimerSnapshot>
   onTimerSnapshot(listener: (snapshot: TimerSnapshot) => void): () => void
 }

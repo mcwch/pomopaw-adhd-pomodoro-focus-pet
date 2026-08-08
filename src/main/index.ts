@@ -55,7 +55,7 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
@@ -89,7 +89,7 @@ app.whenReady().then(() => {
     makeId: randomUUID,
     publish: (snapshot) => BrowserWindow.getAllWindows().forEach((window) => window.webContents.send('timer:snapshot', snapshot))
   })
-  void timerController.hydrate()
+  await timerController.hydrate()
   registerTimerIpc({ handle: ipcMain.handle.bind(ipcMain), controller: timerController })
   setInterval(() => { void timerController?.tick().catch((error) => console.error('Timer tick failed', error)) }, 1000)
 
