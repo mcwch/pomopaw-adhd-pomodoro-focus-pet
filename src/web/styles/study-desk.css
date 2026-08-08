@@ -63,6 +63,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 
 .study-corner { display: grid; align-content: center; justify-items: center; text-align: center; }
 .study-corner img { width: min(100%, 250px); display: block; filter: drop-shadow(0 16px 18px rgba(24, 68, 91, .14)); }
+.lion-state--celebrating { animation: companion-celebrate .55s ease-in-out 5 alternate; }
 .study-corner > div { width: 100%; margin-top: 24px; }
 .study-corner h2 { font-size: 1.55rem; }
 .study-corner p { margin: 10px 0 0; color: #527483; font-size: .88rem; line-height: 1.5; }
@@ -89,3 +90,5 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+@keyframes companion-celebrate { from { transform: translateY(0) rotate(-1deg); } to { transform: translateY(-10px) rotate(1deg); } }
