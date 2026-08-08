@@ -1,25 +1,14 @@
 import { readFile, rename, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { z } from 'zod'
-
-const appStateSchema = z.object({
-  version: z.literal(1),
-  tasks: z.array(z.unknown()),
-  sessions: z.array(z.unknown()),
-  rewards: z.object({ stars: z.number(), focusedMinutes: z.number() })
-})
-export type AppState = z.infer<typeof appStateSchema>
-export const freshAppState = (): AppState => ({ version: 1, tasks: [], sessions: [], rewards: { stars: 0, focusedMinutes: 0 } })
+import { AppStateSchema, FocusHistorySchema, freshAppState, freshFocusHistory, type AppState, type FocusHistory } from '../shared/state'
+import type { SessionRecord } from '../shared/timer'
 
 export class StateRepository {
   constructor(private readonly directory: string) {}
-  async load(): Promise<AppState> {
-    try { return appStateSchema.parse(JSON.parse(await readFile(join(this.directory, 'focus-state.json'), 'utf8'))) } catch { return freshAppState() }
-  }
-  async save(state: AppState): Promise<void> {
-    const target = join(this.directory, 'focus-state.json')
-    const temporary = `${target}.tmp`
-    await writeFile(temporary, JSON.stringify(appStateSchema.parse(state)), 'utf8')
-    await rename(temporary, target)
-  }
+  async loadState(): Promise<AppState> { return this.load('focus-state.json', AppStateSchema, freshAppState) }
+  async saveState(state: AppState): Promise<void> { await this.write('focus-state.json', AppStateSchema.parse(state)) }
+  async loadHistory(): Promise<FocusHistory> { return this.load('focus-history.json', FocusHistorySchema, freshFocusHistory) }
+  async appendSession(session: SessionRecord): Promise<void> { const history = await this.loadHistory(); if (history.sessions.some(({ id }) => id === session.id)) throw new Error('Duplicate session ID'); await this.write('focus-history.json', { ...history, sessions: [...history.sessions, session] }) }
+  private async load<T>(name: string, schema: { parse(value: unknown): T }, fresh: () => T): Promise<T> { const file = join(this.directory, name); try { return schema.parse(JSON.parse(await readFile(file, 'utf8'))) } catch { try { await rename(file, join(this.directory, `${name.replace('.json', '')}.invalid-${Date.now()}.json`)) } catch {} return fresh() } }
+  private async write(name: string, value: unknown): Promise<void> { const target = join(this.directory, name); await writeFile(`${target}.tmp`, JSON.stringify(value), 'utf8'); await rename(`${target}.tmp`, target) }
 }
