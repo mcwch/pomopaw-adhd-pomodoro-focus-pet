@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import ProgressPage from './components/ProgressPage'
 import RecoveryNotice from './components/RecoveryNotice'
 import StudyDesk from './components/StudyDesk'
 import { useStudyStore } from './store'
@@ -9,6 +10,7 @@ export default function WebApp(): React.JSX.Element {
   const snapshot = useStudyStore((state) => state.snapshot)
   const recovery = useStudyStore((state) => state.recovery)
   const stars = useStudyStore((state) => state.stars)
+  const history = useStudyStore((state) => state.history)
   const hydrate = useStudyStore((state) => state.hydrate)
   const start = useStudyStore((state) => state.start)
   const pause = useStudyStore((state) => state.pause)
@@ -26,5 +28,10 @@ export default function WebApp(): React.JSX.Element {
 
   if (!hydrated) return <main className="web-loading">Opening your study desk...</main>
   if (recovery) return <main className="web-loading"><RecoveryNotice elapsedSeconds={recovery.elapsedSeconds} onRecord={() => void resolveRecovery('record_partial')} onDiscard={() => void resolveRecovery('discard')} /></main>
-  return <StudyDesk snapshot={snapshot} stars={stars} onStart={(title) => void start(title)} onPause={() => void pause()} onResume={() => void resume()} onEndEarly={() => void endEarly()} />
+  return <AppViews snapshot={snapshot} stars={stars} history={history} onStart={(title) => void start(title)} onPause={() => void pause()} onResume={() => void resume()} onEndEarly={() => void endEarly()} />
+}
+
+function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndEarly }: { snapshot: ReturnType<typeof useStudyStore.getState>['snapshot']; stars: number; history: ReturnType<typeof useStudyStore.getState>['history']; onStart: (title: string) => void; onPause: () => void; onResume: () => void; onEndEarly: () => void }): React.JSX.Element {
+  const [view, setView] = useState<'focus' | 'progress'>('focus')
+  return <div className="app-shell"><nav className="app-nav" aria-label="Main navigation"><span className="app-nav__brand">Focus Companion</span><div><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button></div></nav>{view === 'focus' ? <StudyDesk snapshot={snapshot} stars={stars} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} /> : <ProgressPage completedPomodoros={stars} sessions={history} />}</div>
 }
