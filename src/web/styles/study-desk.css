@@ -358,3 +358,55 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
   .progress-page__main { max-width: 760px; }
   .progress-page__aside { max-width: 760px; }
 }
+
+/* Floating Stitch companion: the lion stays present without taking a column from the work. */
+.study-desk { grid-template-columns: 360px minmax(0, 1fr); }
+.floating-companion { position: fixed; z-index: 30; width: 174px; display: grid; justify-items: center; touch-action: none; user-select: none; transition: opacity .18s ease, filter .18s ease; }
+.floating-companion--dragging { cursor: grabbing; filter: drop-shadow(0 16px 24px rgba(20,61,88,.2)); }
+.floating-companion__bubble { width: max-content; max-width: 174px; display: grid; gap: 3px; margin-bottom: -8px; padding: 9px 12px; border: 1px solid rgba(103,134,155,.18); border-radius: 13px; background: rgba(255,255,255,.94); box-shadow: 0 8px 20px rgba(20,61,88,.1); text-align: center; }
+.floating-companion__bubble strong { color: #143d58; font-size: .67rem; line-height: 1.15; }
+.floating-companion__bubble span { color: #67869b; font-size: .58rem; line-height: 1.2; }
+.floating-companion__pet { width: 158px; height: 158px; display: grid; place-items: center; border: 0; padding: 0; background: transparent; cursor: grab; }
+.floating-companion__pet:active { cursor: grabbing; }
+.floating-companion__halo { width: 144px; height: 144px; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(103,134,155,.14); border-radius: 44px; background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.98), rgba(236,247,249,.94)); box-shadow: 0 13px 26px rgba(20,61,88,.12); animation: companion-idle 3.6s ease-in-out infinite; }
+.floating-companion__halo img { width: 142px; height: 142px; object-fit: contain; mix-blend-mode: multiply; filter: saturate(1.15) brightness(1.03) drop-shadow(0 9px 8px rgba(20,61,88,.18)); pointer-events: none; }
+.floating-companion__hide { position: absolute; top: 58px; right: -2px; width: 22px; height: 22px; border: 1px solid rgba(103,134,155,.2); border-radius: 50%; background: rgba(255,255,255,.9); color: #67869b; font-size: 1rem; line-height: 1; opacity: 0; transition: opacity .18s ease; }
+.floating-companion:hover .floating-companion__hide, .floating-companion__hide:focus-visible { opacity: 1; }
+.floating-companion__hint { margin-top: -7px; color: #7996a3; font-size: .52rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .65; }
+.floating-companion--celebrating .floating-companion__halo { animation: companion-float-celebrate .58s ease-in-out 5 alternate; }
+.floating-companion__reopen { position: fixed; z-index: 29; right: 18px; bottom: 18px; border: 1px solid rgba(103,134,155,.24); border-radius: 999px; background: rgba(255,255,255,.94); color: #143d58; padding: 9px 13px; box-shadow: 0 8px 22px rgba(20,61,88,.12); font-size: .66rem; font-weight: 800; }
+.floating-companion--dragging .floating-companion__halo { animation: none; }
+
+.progress-companion-summary { padding: 24px 0 8px; border-top: 1px solid rgba(103,134,155,.16); }
+.progress-companion-summary h2 { max-width: 360px; margin: 0; color: #18384f; font-size: clamp(1.35rem, 2.4vw, 1.9rem); line-height: 1.08; letter-spacing: -.045em; }
+.progress-companion-summary > p:not(.eyebrow) { max-width: 370px; margin: 12px 0 20px; color: #60808e; font-size: .8rem; line-height: 1.5; }
+.progress-companion-summary__meter { height: 8px; overflow: hidden; border-radius: 999px; background: rgba(103,134,155,.15); }
+.progress-companion-summary__meter span { display: block; height: 100%; border-radius: inherit; background: #78d7c6; transition: width .35s ease; }
+.progress-companion-summary small { display: block; margin-top: 8px; color: #67869b; font-size: .65rem; font-weight: 800; }
+.progress-companion-summary__count { margin: 18px 0 0 !important; color: #7a96a2 !important; font-size: .66rem !important; }
+
+.app-shell--dark .floating-companion__bubble, .app-shell--dark .floating-companion__reopen { border-color: rgba(143,179,197,.24); background: rgba(10,56,81,.96); }
+.app-shell--dark .floating-companion__bubble strong, .app-shell--dark .floating-companion__reopen { color: #d9eff8; }
+.app-shell--dark .floating-companion__bubble span, .app-shell--dark .floating-companion__hint { color: #8fb3c5; }
+.app-shell--dark .floating-companion__halo { border-color: rgba(143,179,197,.32); background: radial-gradient(circle at 50% 35%, #f4fbfb, #cfe8ec); box-shadow: 0 14px 28px rgba(0,0,0,.25); }
+.app-shell--dark .floating-companion__halo img { mix-blend-mode: multiply; filter: saturate(1.35) brightness(1.18) drop-shadow(0 9px 8px rgba(8,36,51,.3)); }
+.app-shell--dark .floating-companion__hide { border-color: rgba(143,179,197,.32); background: rgba(10,56,81,.94); color: #d9eff8; }
+.app-shell--dark .progress-companion-summary { border-color: rgba(143,179,197,.2); }
+.app-shell--dark .progress-companion-summary h2 { color: var(--primary); }
+.app-shell--dark .progress-companion-summary > p:not(.eyebrow), .app-shell--dark .progress-companion-summary small { color: var(--muted); }
+.app-shell--dark .progress-companion-summary__count { color: var(--muted) !important; }
+.app-shell--dark .progress-companion-summary__meter { background: rgba(143,179,197,.2); }
+
+@media (max-width: 720px) {
+  .study-desk { display: flex; min-height: calc(100svh - 64px); flex-direction: column; }
+  .focus-canvas { order: 1; }
+  .today-rail { order: 2; }
+  .floating-companion { transform: scale(.84); transform-origin: bottom right; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-companion--celebrating .floating-companion__halo { animation: none; }
+}
+
+@keyframes companion-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes companion-float-celebrate { from { transform: translateY(0) rotate(-1deg); } to { transform: translateY(-9px) rotate(1deg); } }

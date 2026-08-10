@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { isCompletedFocusTransition } from './celebration'
 import ProgressPage from './components/ProgressPage'
 import RecoveryNotice from './components/RecoveryNotice'
 import StudyDesk from './components/StudyDesk'
+import FloatingCompanion from './components/FloatingCompanion'
 import { useStudyStore } from './store'
 import './styles/study-desk.css'
 
@@ -44,11 +46,22 @@ interface AppViewsProps {
 function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndEarly }: AppViewsProps): React.JSX.Element {
   const [view, setView] = useState<'focus' | 'progress'>('focus')
   const [darkMode, setDarkMode] = useState(() => window.localStorage.getItem('focus-companion:theme') === 'dark')
+  const [celebrating, setCelebrating] = useState(false)
+  const previousSnapshot = useRef(snapshot)
 
   useEffect(() => {
     window.localStorage.setItem('focus-companion:theme', darkMode ? 'dark' : 'light')
     document.documentElement.classList.toggle('dark', darkMode)
   }, [darkMode])
+
+  useEffect(() => {
+    const previous = previousSnapshot.current
+    previousSnapshot.current = snapshot
+    if (!isCompletedFocusTransition(previous, snapshot)) return
+    setCelebrating(true)
+    const timeout = window.setTimeout(() => setCelebrating(false), 3600)
+    return () => window.clearTimeout(timeout)
+  }, [snapshot])
 
   return <div className={darkMode ? 'app-shell app-shell--dark' : 'app-shell'}>
     <nav className="app-nav" aria-label="Main navigation">
@@ -56,6 +69,7 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
       <div className="app-nav__links"><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button><button className="app-nav__tab app-nav__tab--quiet" type="button" disabled title="Friends will arrive with accounts and cloud sync">Friends</button></div>
       <div className="app-nav__meta"><span>2 days back this week</span><button type="button" aria-label={darkMode ? 'Use light mode' : 'Use dark mode'} aria-pressed={darkMode} className="app-nav__settings" onClick={() => setDarkMode((value) => !value)}>{darkMode ? '☀' : '☾'}</button></div>
     </nav>
-    {view === 'focus' ? <StudyDesk snapshot={snapshot} stars={stars} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} /> : <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} />}
+    {view === 'focus' ? <StudyDesk snapshot={snapshot} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} /> : <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} />}
+    <FloatingCompanion phase={snapshot.phase} page={view} celebrating={celebrating} />
   </div>
 }
