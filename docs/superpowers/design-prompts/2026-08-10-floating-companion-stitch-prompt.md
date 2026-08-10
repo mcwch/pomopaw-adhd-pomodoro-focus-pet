@@ -14,3 +14,8 @@ Use these companion states:
 The main Focus screen should become an open two-column composition: a narrow Today task rail on the left and a dominant timer canvas on the right. The previous large Study Corner panel is removed to create breathing room for the timer, AI task-shrinking helper, sound controls, and future social widgets. The Progress screen should keep the real monthly calendar and metrics as the primary content; replace the large room scene with a compact milestone/friends summary while the floating lion remains globally visible.
 
 Preserve existing interaction hierarchy: Start 25 minutes, Pause/Resume, End early, None/Rain/Café/Forest/White noise, local AI “Help me shrink this into a first step,” streak/verified-minute metrics, and the future Friends entry point. Treat the lion as a supportive study partner, never as a game distraction.
+## Follow-up interaction prompt
+
+Refine the floating companion into a true desktop-pet interaction. Remove every speech bubble, helper label, “drag me” hint, and “ready when you are” copy. The character must be a transparent cutout with no white square or rounded container. Keep the same blue-maned Stitch lion identity, scale it up slightly while preserving aspect ratio, and use a subtle drop shadow only for separation.
+
+Define four quiet motion states: a gentle idle bob, one small hover hop, a rhythmic walk-like squash/step cycle while dragging, and a short celebratory jump after a verified focus block. Keep the animation calm, non-flashing, and disabled under reduced-motion preferences. The companion remains draggable and non-blocking over Focus and Progress screens.

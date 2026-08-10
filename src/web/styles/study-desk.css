@@ -405,8 +405,21 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floating-companion--celebrating .floating-companion__halo { animation: none; }
+  .floating-companion__pet img, .floating-companion--celebrating .floating-companion__pet img, .floating-companion--dragging .floating-companion__pet img { animation: none; }
 }
 
 @keyframes companion-idle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes companion-float-celebrate { from { transform: translateY(0) rotate(-1deg); } to { transform: translateY(-9px) rotate(1deg); } }
+
+/* Transparent sprite treatment: no tile or explanatory copy around the character. */
+.floating-companion { width: 190px; }
+.floating-companion__pet { width: 190px; height: 190px; overflow: visible; }
+.floating-companion__pet img { width: 178px; height: 178px; object-fit: contain; filter: drop-shadow(0 10px 7px rgba(20,61,88,.22)); transition: filter .18s ease; animation: companion-idle 3.6s ease-in-out infinite; pointer-events: none; }
+.floating-companion__pet:hover img { animation: companion-hop .46s cubic-bezier(.2,.85,.35,1.25); filter: drop-shadow(0 14px 9px rgba(20,61,88,.2)); }
+.floating-companion--dragging .floating-companion__pet img { animation: companion-walk .62s ease-in-out infinite; }
+.floating-companion--celebrating .floating-companion__pet img { animation: companion-celebrate .58s ease-in-out 5 alternate; }
+.floating-companion__hide { top: 10px; right: 2px; }
+.floating-companion--dragging .floating-companion__hide { opacity: 0; }
+.app-shell--dark .floating-companion__pet img { filter: drop-shadow(0 11px 8px rgba(0,0,0,.34)) saturate(1.1) brightness(1.04); }
+@keyframes companion-hop { 0% { transform: translateY(0) rotate(0); } 45% { transform: translateY(-12px) rotate(-2deg) scale(1.02); } 100% { transform: translateY(0) rotate(0); } }
+@keyframes companion-walk { 0%, 100% { transform: translate(0, 0) rotate(-1deg) scaleY(1); } 25% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } 50% { transform: translate(6px, 0) rotate(-1deg) scaleY(1); } 75% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TimerPhase } from '../../shared/timer'
-import stitchStudyLion from '../assets/lion/stitch-study-desk.png'
+import stitchStudyLion from '../assets/lion/stitch-study-desk-transparent.png'
 
 interface FloatingPosition {
   readonly x: number
@@ -16,7 +16,7 @@ export interface FloatingCompanionProps {
 const POSITION_KEY = 'focus-companion:floating-position'
 
 function defaultPosition(): FloatingPosition {
-  return { x: Math.max(16, window.innerWidth - 218), y: Math.max(92, window.innerHeight - 230) }
+  return { x: Math.max(16, window.innerWidth - 224), y: Math.max(92, window.innerHeight - 214) }
 }
 
 function readPosition(): FloatingPosition {
@@ -30,8 +30,8 @@ function readPosition(): FloatingPosition {
 }
 
 function clampPosition(position: FloatingPosition): FloatingPosition {
-  const width = 172
-  const height = 190
+  const width = 190
+  const height = 182
   return {
     x: Math.min(Math.max(10, position.x), Math.max(10, window.innerWidth - width)),
     y: Math.min(Math.max(76, position.y), Math.max(76, window.innerHeight - height)),
@@ -45,10 +45,10 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
   const dragOffset = useRef<FloatingPosition>({ x: 0, y: 0 })
 
   const status = useMemo(() => {
-    if (celebrating) return { label: 'Celebrating with you', copy: 'You earned a focus star!', alt: 'Blue-maned lion celebrating after a completed focus session' }
-    if (phase === 'focus') return { label: 'Studying with you', copy: 'One small step at a time.', alt: 'Blue-maned lion studying with you' }
-    if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return { label: 'Resting with you', copy: 'A real pause counts too.', alt: 'Blue-maned lion resting during a break' }
-    return { label: page === 'progress' ? 'Keeping your place' : 'Ready when you are', copy: 'Your next small step is enough.', alt: 'Blue-maned lion companion ready to study' }
+    if (celebrating) return 'Blue-maned lion celebrating after a completed focus session'
+    if (phase === 'focus') return 'Blue-maned lion studying with you'
+    if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return 'Blue-maned lion resting during a break'
+    return page === 'progress' ? 'Blue-maned lion keeping your place' : 'Blue-maned lion companion ready to study'
   }, [celebrating, page, phase])
 
   useEffect(() => {
@@ -85,7 +85,6 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
     style={{ left: position.x, top: position.y }}
     aria-label="Floating study companion"
   >
-    <div className="floating-companion__bubble"><strong>{status.label}</strong><span>{status.copy}</span></div>
     <button
       className="floating-companion__pet"
       type="button"
@@ -96,9 +95,8 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
         setDragging(true)
       }}
     >
-      <span className="floating-companion__halo"><img src={stitchStudyLion} alt={status.alt} draggable="false" /></span>
+      <img src={stitchStudyLion} alt={status} draggable="false" />
     </button>
     <button className="floating-companion__hide" type="button" onClick={() => setHidden(true)} aria-label="Hide study companion">×</button>
-    <span className="floating-companion__hint" aria-hidden="true">drag me</span>
   </aside>
 }
