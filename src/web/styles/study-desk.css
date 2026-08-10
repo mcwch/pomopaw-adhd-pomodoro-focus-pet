@@ -167,3 +167,42 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 
 @media (max-width: 900px) { .progress-page__columns { grid-template-columns: 1fr; } .progress-page__columns > .corner-scene { max-width: 760px; } }
 @media (max-width: 500px) { .progress-calendar { padding: 18px 12px; border-radius: 22px; } .calendar-weekdays, .calendar-grid { gap: 5px; } .calendar-day, .calendar-day--focused, .calendar-day--future { border-radius: 13px; } .progress-stats { gap: 6px; } .progress-stat { padding: 12px 10px; } }
+
+/* Stitch Focus shell: fixed navigation, compact rail, dominant timer canvas, companion panel. */
+:root { font-family: Inter, ui-rounded, system-ui, sans-serif; background: #f7fbfc; }
+.app-nav { min-height: 64px; padding: 0 40px; background: #f6fafb; }
+.app-nav__brand { color: #143d58; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1rem; }
+.app-nav__links { display: flex; align-items: stretch; gap: 26px; height: 64px; }
+.app-nav__tab { border-radius: 0; padding: 0 2px; color: #67869b; font-size: .74rem; font-weight: 500; }
+.app-nav__tab--active { border-bottom: 2px solid #006b5e; background: transparent; color: #143d58; font-weight: 700; }
+.app-nav__tab--quiet { opacity: .9; }
+.app-nav__meta { display: flex; align-items: center; gap: 14px; color: #67869b; font-size: .68rem; }
+.app-nav__settings { border: 0; background: transparent; color: #67869b; font-size: .9rem; opacity: .85; }
+.study-desk { min-height: calc(100vh - 64px); grid-template-columns: 280px minmax(420px, 1fr) 340px; }
+.today-rail { padding: 24px; background: #f0f4f5; }
+.today-rail .eyebrow { display: none; }
+.rail-heading h2 { margin-top: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.5rem; }
+.today-rail ol { margin-top: 25px; }
+.task-row { grid-template-columns: 1fr auto; }
+.task-toggle { order: -1; width: 20px; height: 20px; margin-right: 3px; overflow: hidden; border: 1px solid #67869b; border-radius: 4px; padding: 0; font-size: 0; }
+.task-row { grid-template-columns: 20px 1fr; }
+.task-choice { padding: 11px 0; }
+.task-row--complete .task-toggle { border-color: #77d6c5; background: #77d6c5; }
+.task-row--complete .task-toggle::after { content: '✓'; color: #fff; font-size: .7rem; }
+.focus-canvas { padding: 32px; }
+.focus-canvas h1 { max-width: 600px; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.2; letter-spacing: -.045em; }
+.focus-canvas--idle h1 { max-width: 520px; font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: .98; }
+.focus-canvas form { margin-top: 28px; }
+.study-corner { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 24px; background: #f0f4f5; border-left: 1px solid rgba(103,134,155,.2); text-align: center; }
+.study-corner__label { margin: 0 0 18px; color: #143d58; font-size: .67rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.study-corner__scene { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; min-height: 260px; margin: 0 -2px 18px; overflow: hidden; border: 1px solid rgba(103,134,155,.12); border-radius: 14px; background: #fff; }
+.study-corner__scene::after { content: ''; position: absolute; right: 14%; bottom: 12%; left: 14%; height: 2px; background: #d8c2a8; box-shadow: 0 9px 0 rgba(216,194,168,.3); }
+.study-corner__scene .lion-state { position: relative; z-index: 1; width: min(82%, 270px); filter: drop-shadow(0 12px 10px rgba(20,61,88,.12)); }
+.study-corner__slots { position: absolute; right: 18px; bottom: 22px; left: 18px; display: flex; justify-content: space-between; color: #77d6c5; font-size: 1.4rem; opacity: .65; }
+.study-corner__message { margin-top: 0; padding: 14px; border: 1px solid rgba(255,255,255,.7); border-radius: 12px; background: rgba(255,255,255,.55); }
+.study-corner__message h2 { margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.2rem; }
+.study-corner__message p { margin: 7px 0 0; font-size: .73rem; }
+.study-corner__message .quiet-copy { margin-top: 12px; font-size: .65rem; }
+
+@media (max-width: 1060px) { .study-desk { grid-template-columns: 240px minmax(420px, 1fr); } .study-corner { grid-column: 1 / -1; min-height: 300px; } }
+@media (max-width: 720px) { .app-nav { padding: 0 18px; } .app-nav__meta { display: none; } .app-nav__links { gap: 14px; } .study-desk { display: flex; min-height: calc(100svh - 64px); } .today-rail { order: 2; } .focus-canvas { order: 1; min-height: 62svh; } .study-corner { order: 3; } }
