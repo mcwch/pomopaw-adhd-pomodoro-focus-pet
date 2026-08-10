@@ -134,3 +134,33 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .progress-page__intro { width: min(100%, 760px); margin: 0 auto; }
 .progress-page__intro h1 { max-width: 690px; margin: 0; color: #163e57; font-size: clamp(2.1rem, 5vw, 4.4rem); line-height: .98; letter-spacing: -.065em; }
 .progress-page__intro > p:last-child { max-width: 610px; margin: 16px 0 0; color: #648493; font-size: .95rem; line-height: 1.55; }
+.progress-page { max-width: 1220px; margin: 0 auto; gap: 34px; padding: 44px clamp(20px, 4vw, 52px) 70px; }
+.progress-page__intro { width: 100%; margin: 0; }
+.progress-page__intro h1 { font-size: clamp(2.2rem, 4vw, 3.6rem); }
+.progress-page__columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, 340px); align-items: start; gap: clamp(24px, 4vw, 42px); }
+.progress-page__main { min-width: 0; }
+.progress-calendar { width: 100%; padding: 26px; border-radius: 30px; background: rgba(255,255,255,.82); box-shadow: 0 14px 32px rgba(34,83,105,.07); }
+.calendar-weekdays, .calendar-grid { gap: 9px; }
+.calendar-day { border-radius: 18px; background: rgba(248,252,253,.8); }
+.calendar-day--focused { border-radius: 18px; background: #effaf7; }
+.calendar-day--future { border-radius: 18px; }
+.calendar-legend { margin-top: 18px; font-size: .7rem; }
+.progress-page__note { margin: 14px 4px 0; color: #7a96a2; font-size: .68rem; font-style: italic; line-height: 1.45; }
+.progress-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
+.progress-stat { min-width: 0; padding: 15px 16px; border: 1px solid #d5e4e9; border-radius: 16px; background: rgba(255,255,255,.68); }
+.progress-stat strong { display: block; color: #18384f; font-size: 1.35rem; letter-spacing: -.04em; }
+.progress-stat span { display: block; margin-top: 4px; color: #6b8996; font-size: .68rem; line-height: 1.25; }
+.milestones { margin-top: 24px; }
+.milestones h2 { margin: 0 0 10px; color: #18384f; font-size: 1.05rem; letter-spacing: -.025em; }
+.milestone-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.milestone-list span { padding: 6px 9px; border: 1px solid #d2e2e7; border-radius: 999px; background: #f9fcfd; color: #587685; font-size: .65rem; font-weight: 800; }
+.milestone-list__muted { color: #9babb1 !important; }
+.milestones .primary-action { margin-top: 18px; border: 1px solid #173f56; border-radius: 10px; background: #173f56; color: #fff; padding: 10px 13px; box-shadow: none; font-size: .68rem; }
+.milestones .primary-action:hover { transform: none; background: #20566f; }
+.progress-page__columns > .corner-scene { width: 100%; margin: 0; padding: 20px; border-radius: 24px; }
+.corner-scene__copy h2 { font-size: clamp(1.25rem, 2.5vw, 1.7rem); }
+.corner-scene__room { height: 230px; min-height: 190px; margin-top: 18px; border-radius: 18px; }
+.corner-scene__count { font-size: .66rem; }
+
+@media (max-width: 900px) { .progress-page__columns { grid-template-columns: 1fr; } .progress-page__columns > .corner-scene { max-width: 760px; } }
+@media (max-width: 500px) { .progress-calendar { padding: 18px 12px; border-radius: 22px; } .calendar-weekdays, .calendar-grid { gap: 5px; } .calendar-day, .calendar-day--focused, .calendar-day--future { border-radius: 13px; } .progress-stats { gap: 6px; } .progress-stat { padding: 12px 10px; } }
