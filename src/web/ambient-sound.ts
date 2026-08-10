@@ -6,6 +6,7 @@ let gain: GainNode | null = null
 
 export function startAmbientSound(sound: SoundId): void {
   if (typeof window === 'undefined') return
+  if (sound === 'none') { stopAmbientSound(); return }
   const AudioContextConstructor = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
   if (!AudioContextConstructor) return
   stopAmbientSound()
