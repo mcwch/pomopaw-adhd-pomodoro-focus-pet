@@ -110,6 +110,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .calendar-weekdays, .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 7px; }
 .calendar-weekdays { margin-bottom: 8px; color: #71909e; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-align: center; text-transform: uppercase; }
 .calendar-grid > * { min-width: 0; aspect-ratio: 1; }
+.calendar-empty { background: #f7fbfc; }
 .calendar-day { height: 100%; display: grid; align-content: center; justify-items: center; gap: 2px; border: 1px solid transparent; border-radius: 14px; color: #6b8996; font-size: .72rem; }
 .calendar-day--focused { border-color: #b9e6dc; background: #effaf7; color: #165d56; box-shadow: inset 0 0 0 1px rgba(126, 215, 195, .16); }
 .calendar-day--future { color: #b4c5cc; background: rgba(241, 247, 249, .6); }
@@ -128,6 +129,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .corner-scene__room::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 31%; border-top: 3px solid rgba(108, 72, 47, .18); background: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 44px, rgba(90,64,41,.07) 44px 46px); }
 .corner-scene__lion, .corner-scene__asset { position: absolute; z-index: 1; object-fit: contain; filter: drop-shadow(0 10px 9px rgba(28, 67, 89, .15)); }
 .corner-scene__lion { z-index: 2; width: 34%; max-height: 71%; right: 27%; bottom: 9%; }
+.corner-scene__lion { mix-blend-mode: multiply; }
 .corner-scene__asset--window { z-index: 0; width: 28%; top: 7%; left: 7%; filter: drop-shadow(0 7px 6px rgba(28, 67, 89, .1)); }
 .corner-scene__asset--lamp { width: 18%; right: 10%; bottom: 12%; }
 .corner-scene__asset--books { width: 21%; left: 16%; bottom: 10%; }
@@ -137,16 +139,18 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .progress-page__intro { width: min(100%, 760px); margin: 0 auto; }
 .progress-page__intro h1 { max-width: 690px; margin: 0; color: #163e57; font-size: clamp(2.1rem, 5vw, 4.4rem); line-height: .98; letter-spacing: -.065em; }
 .progress-page__intro > p:last-child { max-width: 610px; margin: 16px 0 0; color: #648493; font-size: .95rem; line-height: 1.55; }
-.progress-page { max-width: 1220px; margin: 0 auto; gap: 34px; padding: 44px clamp(20px, 4vw, 52px) 70px; }
+.progress-page { max-width: none; margin: 0; gap: 34px; padding: 44px 40px 70px; }
 .progress-page__intro { width: 100%; margin: 0; }
 .progress-page__intro h1 { font-size: clamp(2.2rem, 4vw, 3.6rem); }
-.progress-page__columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(270px, 340px); align-items: start; gap: clamp(24px, 4vw, 42px); }
+.progress-page__columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); align-items: start; gap: 64px; }
 .progress-page__main { min-width: 0; }
-.progress-calendar { width: 100%; padding: 26px; border-radius: 30px; background: rgba(255,255,255,.82); box-shadow: 0 14px 32px rgba(34,83,105,.07); }
+.progress-calendar { width: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .calendar-weekdays, .calendar-grid { gap: 9px; }
-.calendar-day { border-radius: 18px; background: rgba(248,252,253,.8); }
-.calendar-day--focused { border-radius: 18px; background: #effaf7; }
-.calendar-day--future { border-radius: 18px; }
+.calendar-grid { gap: 1px; padding: 1px; border: 1px solid rgba(103,134,155,.18); border-radius: 12px; background: rgba(103,134,155,.12); overflow: hidden; }
+.calendar-grid > * { aspect-ratio: auto; min-height: 100px; }
+.calendar-day { border-radius: 0; background: #f7fbfc; }
+.calendar-day--focused { border-radius: 0; background: #effaf7; }
+.calendar-day--future { border-radius: 0; }
 .calendar-legend { margin-top: 18px; font-size: .7rem; }
 .progress-page__note { margin: 14px 4px 0; color: #7a96a2; font-size: .68rem; font-style: italic; line-height: 1.45; }
 .progress-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 22px; }
@@ -164,8 +168,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .corner-scene__copy h2 { font-size: clamp(1.25rem, 2.5vw, 1.7rem); }
 .corner-scene__room { height: 230px; min-height: 190px; margin-top: 18px; border-radius: 18px; }
 .corner-scene__count { font-size: .66rem; }
+.progress-page__aside { min-width: 0; }
+.friends-cta { margin-top: 38px; padding: 22px; border: 1px solid rgba(103,134,155,.14); border-radius: 12px; background: #f0f4f5; }
+.friends-cta button { border: 0; border-bottom: 1px solid transparent; padding: 0 0 5px; background: transparent; color: #143d58; font-size: .86rem; font-weight: 700; }
+.friends-cta button:disabled { cursor: not-allowed; opacity: 1; }
+.friends-cta p { margin: 8px 0 0; color: #67869b; font-size: .68rem; line-height: 1.45; }
 
-@media (max-width: 900px) { .progress-page__columns { grid-template-columns: 1fr; } .progress-page__columns > .corner-scene { max-width: 760px; } }
+@media (max-width: 900px) { .progress-page { padding-inline: 24px; } .progress-page__columns { grid-template-columns: 1fr; gap: 36px; } .progress-page__columns > .corner-scene { max-width: 760px; } }
 @media (max-width: 500px) { .progress-calendar { padding: 18px 12px; border-radius: 22px; } .calendar-weekdays, .calendar-grid { gap: 5px; } .calendar-day, .calendar-day--focused, .calendar-day--future { border-radius: 13px; } .progress-stats { gap: 6px; } .progress-stat { padding: 12px 10px; } }
 
 /* Stitch Focus shell: fixed navigation, compact rail, dominant timer canvas, companion panel. */
@@ -178,10 +187,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-nav__tab--quiet { opacity: .9; }
 .app-nav__meta { display: flex; align-items: center; gap: 14px; color: #67869b; font-size: .68rem; }
 .app-nav__settings { border: 0; background: transparent; color: #67869b; font-size: .9rem; opacity: .85; }
-.study-desk { min-height: calc(100vh - 64px); grid-template-columns: 280px minmax(420px, 1fr) 340px; }
+.study-desk { min-height: calc(100vh - 64px); max-width: none; grid-template-columns: 360px minmax(0, 1fr) 435px; }
 .today-rail { padding: 24px; background: #f0f4f5; }
 .today-rail .eyebrow { display: none; }
-.rail-heading h2 { margin-top: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.5rem; }
+.rail-heading h2 { max-width: 260px; margin-top: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.5rem; }
 .today-rail ol { margin-top: 25px; }
 .task-row { grid-template-columns: 1fr auto; }
 .task-toggle { order: -1; width: 20px; height: 20px; margin-right: 3px; overflow: hidden; border: 1px solid #67869b; border-radius: 4px; padding: 0; font-size: 0; }
@@ -193,11 +202,24 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .focus-canvas h1 { max-width: 600px; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.2; letter-spacing: -.045em; }
 .focus-canvas--idle h1 { max-width: 520px; font-size: clamp(2.4rem, 5vw, 4.4rem); line-height: .98; }
 .focus-canvas form { margin-top: 28px; }
+.focus-canvas:not(.focus-canvas--idle) { align-content: start; padding-top: 48px; }
+.focus-canvas:not(.focus-canvas--idle) .timer-ring { width: clamp(300px, 29vw, 390px); margin: 72px 0 70px; }
+.focus-canvas:not(.focus-canvas--idle) .sound-controls { margin-top: 40px; }
+.sound-controls { display: flex; align-items: center; gap: 12px; margin: 25px 0 22px; }
+.sound-controls__main, .sound-controls__option { border: 1px solid rgba(103,134,155,.2); color: #67869b; font-size: .72rem; }
+.sound-controls__main { display: flex; align-items: center; gap: 9px; min-width: 205px; padding: 9px 13px; border-radius: 9px; background: #eaeff0; text-align: left; }
+.sound-controls__main > span:first-child { color: #143d58; font-size: 1.2rem; }
+.sound-controls__main > span:nth-child(2) { display: flex; flex: 1; flex-direction: column; gap: 1px; color: #143d58; font-weight: 600; }
+.sound-controls__main small { color: #67869b; font-size: .56rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
+.sound-controls__options { display: flex; align-items: center; gap: 2px; padding: 5px; border: 1px solid rgba(103,134,155,.14); border-radius: 9px; background: #fff; box-shadow: 0 2px 5px rgba(20,61,88,.04); }
+.sound-controls__option { border-color: transparent; border-radius: 6px; background: transparent; padding: 7px 9px; }
+.sound-controls__option:hover { background: #f0f4f5; color: #143d58; }
+.sound-controls__option--active { background: #eaeff0; color: #143d58; font-weight: 700; }
 .study-corner { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 24px; background: #f0f4f5; border-left: 1px solid rgba(103,134,155,.2); text-align: center; }
 .study-corner__label { margin: 0 0 18px; color: #143d58; font-size: .67rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .study-corner__scene { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; min-height: 260px; margin: 0 -2px 18px; overflow: hidden; border: 1px solid rgba(103,134,155,.12); border-radius: 14px; background: #fff; }
 .study-corner__scene::after { content: ''; position: absolute; right: 14%; bottom: 12%; left: 14%; height: 2px; background: #d8c2a8; box-shadow: 0 9px 0 rgba(216,194,168,.3); }
-.study-corner__scene .lion-state { position: relative; z-index: 1; width: min(82%, 270px); filter: drop-shadow(0 12px 10px rgba(20,61,88,.12)); }
+.study-corner__scene .lion-state { position: relative; z-index: 1; width: min(100%, 350px); filter: drop-shadow(0 12px 10px rgba(20,61,88,.12)); }
 .study-corner__slots { position: absolute; right: 18px; bottom: 22px; left: 18px; display: flex; justify-content: space-between; color: #77d6c5; font-size: 1.4rem; opacity: .65; }
 .study-corner__message { margin-top: 0; padding: 14px; border: 1px solid rgba(255,255,255,.7); border-radius: 12px; background: rgba(255,255,255,.55); }
 .study-corner__message h2 { margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.2rem; }

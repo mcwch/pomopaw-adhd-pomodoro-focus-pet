@@ -23,7 +23,7 @@ export default function ProgressPage({ completedPomodoros, sessions, now = new D
         <div className="progress-stats" aria-label="Progress summary"><Stat value={recordedMinutes} label="verified focus minutes" /><Stat value={completedPomodoros} label="completed Pomodoros" /><Stat value={taskCheckIns} label="small tasks moved forward" /></div>
         <section className="milestones" aria-labelledby="milestones-heading"><h2 id="milestones-heading">Milestones</h2><div className="milestone-list"><span>🔥 First 25</span><span>● Three sessions</span><span>↗ Back this week</span><span className="milestone-list__muted">☆ Five focus stars</span></div><button className="primary-action" type="button" onClick={onStartAnother}>Start another 25 minutes</button></section>
       </div>
-      <StudyCornerScene completedPomodoros={completedPomodoros} />
+      <div className="progress-page__aside"><StudyCornerScene completedPomodoros={completedPomodoros} /><section className="friends-cta" aria-label="Friends preview"><button type="button" disabled>See weekly friends board <span aria-hidden="true">→</span></button><p>Friends features are opt-in and use recorded focus time.</p></section></div>
     </div>
   </main>
 }

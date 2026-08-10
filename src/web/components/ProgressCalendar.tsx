@@ -1,10 +1,10 @@
 import type { CalendarMonth } from '../progress-history'
 
-const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function ProgressCalendar({ month, onPrevious, onNext, canGoPrevious, canGoNext }: { month: CalendarMonth; onPrevious: () => void; onNext: () => void; canGoPrevious: boolean; canGoNext: boolean }): React.JSX.Element {
   const monthName = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(month.year, month.month, 1))
-  const leadingDays = new Date(month.year, month.month, 1).getDay()
+  const leadingDays = (new Date(month.year, month.month, 1).getDay() + 6) % 7
 
   return <section className="progress-calendar" aria-labelledby="calendar-heading">
     <header className="progress-calendar__header">
