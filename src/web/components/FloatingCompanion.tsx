@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TimerPhase } from '../../shared/timer'
-import companionActions from '../assets/lion/companion-actions-sprite-sheet.png'
+import stitchStudyLion from '../assets/lion/stitch-study-desk-transparent.png'
 
 interface FloatingPosition {
   readonly x: number
@@ -30,8 +30,8 @@ function readPosition(): FloatingPosition {
 }
 
 function clampPosition(position: FloatingPosition): FloatingPosition {
-  const width = 220
-  const height = 196
+  const width = 190
+  const height = 182
   return {
     x: Math.min(Math.max(10, position.x), Math.max(10, window.innerWidth - width)),
     y: Math.min(Math.max(76, position.y), Math.max(76, window.innerHeight - height)),
@@ -50,7 +50,6 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
     if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return 'Blue-maned lion resting during a break'
     return page === 'progress' ? 'Blue-maned lion keeping your place' : 'Blue-maned lion companion ready to study'
   }, [celebrating, page, phase])
-  const action = dragging ? 'walk' : celebrating ? 'celebrate' : phase === 'focus' ? 'study' : phase === 'short_break' || phase === 'long_break' || phase === 'paused' ? 'stretch' : 'idle'
 
   useEffect(() => {
     const onResize = (): void => setPosition((current) => clampPosition(current))
@@ -96,7 +95,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
         setDragging(true)
       }}
     >
-      <span className={`floating-companion__sprite floating-companion__sprite--${action}`}><img src={companionActions} alt={status} draggable="false" /></span>
+      <img src={stitchStudyLion} alt={status} draggable="false" />
     </button>
     <button className="floating-companion__hide" type="button" onClick={() => setHidden(true)} aria-label="Hide study companion">×</button>
   </aside>
