@@ -439,3 +439,9 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .floating-companion__pet img { filter: drop-shadow(0 11px 8px rgba(0,0,0,.34)) saturate(1.1) brightness(1.04); }
 @keyframes companion-hop { 0% { transform: translateY(0) rotate(0); } 45% { transform: translateY(-12px) rotate(-2deg) scale(1.02); } 100% { transform: translateY(0) rotate(0); } }
 @keyframes companion-walk { 0%, 100% { transform: translate(0, 0) rotate(-1deg) scaleY(1); } 25% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } 50% { transform: translate(6px, 0) rotate(-1deg) scaleY(1); } 75% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } }
+
+/* Final sprite overrides: keep only the selected 3x2 frame visible. */
+.floating-companion { width: 220px; }
+.floating-companion__pet { width: 220px; height: 236px; }
+.floating-companion__sprite { width: 220px; height: 220px; overflow: hidden; }
+.floating-companion__sprite img { width: 660px; height: 660px; max-width: none; animation: none; transform: none; }
