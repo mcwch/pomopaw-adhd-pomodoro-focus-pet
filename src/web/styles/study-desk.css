@@ -326,11 +326,11 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .study-corner__scene { background: #0d425d; border-color: rgba(143,179,197,.24); }
 .app-shell--dark .study-corner__scene { background: linear-gradient(#0d425d 0 68%, #5d4b3e 68%); }
 .app-shell--dark .study-corner__scene::after { background: rgba(216,194,168,.45); box-shadow: 0 9px 0 rgba(216,194,168,.18); }
-.app-shell--dark .study-corner__scene .lion-state { mix-blend-mode: normal; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
+.app-shell--dark .study-corner__scene .lion-state { mix-blend-mode: multiply; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
 .app-shell--dark .study-corner__slots { color: var(--mint); }
 .app-shell--dark .corner-scene__room { background: linear-gradient(#0d425d 0 67%, #5d4b3e 67%); border-color: rgba(143,179,197,.24); }
 .app-shell--dark .corner-scene__room::after { border-color: rgba(216,194,168,.28); background: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 44px, rgba(0,0,0,.1) 44px 46px); }
-.app-shell--dark .corner-scene__lion { mix-blend-mode: normal; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
+.app-shell--dark .corner-scene__lion { mix-blend-mode: multiply; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
 .app-shell--dark .study-corner__message { background: rgba(10,56,81,.72); border-color: rgba(143,179,197,.24); }
 .app-shell--dark .progress-calendar { color: var(--primary); }
 .app-shell--dark .calendar-grid { border-color: rgba(143,179,197,.25); background: rgba(143,179,197,.15); }
