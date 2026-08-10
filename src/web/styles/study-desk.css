@@ -125,10 +125,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .corner-scene__copy { max-width: 520px; }
 .corner-scene__copy h2 { margin: 0; color: #18384f; font-size: clamp(1.5rem, 3.4vw, 2.35rem); line-height: 1.05; letter-spacing: -.05em; }
 .corner-scene__copy > p:last-child, .corner-scene__count { margin: 12px 0 0; color: #60808e; font-size: .82rem; line-height: 1.5; }
-.corner-scene__room { position: relative; height: min(52vw, 350px); min-height: 240px; margin-top: 24px; overflow: hidden; border: 1px solid #cde1e7; border-radius: 20px; background: linear-gradient(#e9f5fa 0 69%, #d8c2a8 69%); }
+.corner-scene__room { position: relative; height: min(52vw, 350px); min-height: 240px; margin-top: 24px; overflow: hidden; border: 1px solid #cde1e7; border-radius: 20px; background: linear-gradient(#e9f5fa 0 67%, #d8c2a8 67%); }
 .corner-scene__room::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 31%; border-top: 3px solid rgba(108, 72, 47, .18); background: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 44px, rgba(90,64,41,.07) 44px 46px); }
 .corner-scene__lion, .corner-scene__asset { position: absolute; z-index: 1; object-fit: contain; filter: drop-shadow(0 10px 9px rgba(28, 67, 89, .15)); }
-.corner-scene__lion { z-index: 2; width: 34%; max-height: 71%; right: 27%; bottom: 9%; }
+.corner-scene__lion { z-index: 2; width: 42%; max-height: 76%; right: 23%; bottom: 8%; }
 .corner-scene__lion { mix-blend-mode: multiply; }
 .corner-scene__asset--window { z-index: 0; width: 28%; top: 7%; left: 7%; filter: drop-shadow(0 7px 6px rgba(28, 67, 89, .1)); }
 .corner-scene__asset--lamp { width: 18%; right: 10%; bottom: 12%; }
@@ -217,10 +217,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .sound-controls__option--active { background: #eaeff0; color: #143d58; font-weight: 700; }
 .study-corner { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 24px; background: #f0f4f5; border-left: 1px solid rgba(103,134,155,.2); text-align: center; }
 .study-corner__label { margin: 0 0 18px; color: #143d58; font-size: .67rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.study-corner__scene { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; min-height: 260px; margin: 0 -2px 18px; overflow: hidden; border: 1px solid rgba(103,134,155,.12); border-radius: 14px; background: #fff; }
-.study-corner__scene::after { content: ''; position: absolute; right: 14%; bottom: 12%; left: 14%; height: 2px; background: #d8c2a8; box-shadow: 0 9px 0 rgba(216,194,168,.3); }
-.study-corner__scene .lion-state { position: relative; z-index: 1; width: min(100%, 350px); filter: drop-shadow(0 12px 10px rgba(20,61,88,.12)); }
-.study-corner__slots { position: absolute; right: 18px; bottom: 22px; left: 18px; display: flex; justify-content: space-between; color: #77d6c5; font-size: 1.4rem; opacity: .65; }
+.study-corner__scene { position: relative; display: flex; flex: 1; align-items: flex-end; justify-content: center; min-height: 260px; margin: 0 -2px 18px; overflow: hidden; border: 1px solid rgba(103,134,155,.12); border-radius: 14px; background: linear-gradient(#edf7fa 0 68%, #e2ccb5 68%); }
+.study-corner__scene::after { content: ''; position: absolute; right: 10%; bottom: 29%; left: 10%; height: 2px; background: rgba(152,116,80,.4); box-shadow: 0 9px 0 rgba(152,116,80,.16); }
+.study-corner__scene .lion-state { position: relative; z-index: 1; width: min(100%, 350px); margin-bottom: 14%; filter: drop-shadow(0 10px 8px rgba(20,61,88,.2)); mix-blend-mode: multiply; }
+.study-corner__slots { position: absolute; right: 18px; bottom: 14px; left: 18px; z-index: 2; display: flex; justify-content: space-between; color: #4fbaa9; }
+.study-corner__slots span { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; min-width: 44px; font-size: .68rem; font-weight: 700; letter-spacing: .02em; opacity: .8; }
+.study-corner__slots i { font-size: 1.3rem; font-style: normal; line-height: 1; }
+.study-corner__slots small { font-size: .55rem; }
 .study-corner__message { margin-top: 0; padding: 14px; border: 1px solid rgba(255,255,255,.7); border-radius: 12px; background: rgba(255,255,255,.55); }
 .study-corner__message h2 { margin: 0; font-family: 'Plus Jakarta Sans', Inter, sans-serif; font-size: 1.2rem; }
 .study-corner__message p { margin: 7px 0 0; font-size: .73rem; }
@@ -321,6 +324,13 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .secondary-action:hover, .app-shell--dark .ai-helper__result button:hover, .app-shell--dark .ai-helper__ask:hover { background: var(--surface-lowest); }
 .app-shell--dark .add-task input, .app-shell--dark .focus-task-form input { background: var(--surface-lowest) !important; border-color: var(--outline); color: var(--primary); }
 .app-shell--dark .study-corner__scene { background: #0d425d; border-color: rgba(143,179,197,.24); }
+.app-shell--dark .study-corner__scene { background: linear-gradient(#0d425d 0 68%, #5d4b3e 68%); }
+.app-shell--dark .study-corner__scene::after { background: rgba(216,194,168,.45); box-shadow: 0 9px 0 rgba(216,194,168,.18); }
+.app-shell--dark .study-corner__scene .lion-state { mix-blend-mode: normal; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
+.app-shell--dark .study-corner__slots { color: var(--mint); }
+.app-shell--dark .corner-scene__room { background: linear-gradient(#0d425d 0 67%, #5d4b3e 67%); border-color: rgba(143,179,197,.24); }
+.app-shell--dark .corner-scene__room::after { border-color: rgba(216,194,168,.28); background: repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 44px, rgba(0,0,0,.1) 44px 46px); }
+.app-shell--dark .corner-scene__lion { mix-blend-mode: normal; filter: drop-shadow(0 10px 8px rgba(0,0,0,.28)); }
 .app-shell--dark .study-corner__message { background: rgba(10,56,81,.72); border-color: rgba(143,179,197,.24); }
 .app-shell--dark .progress-calendar { color: var(--primary); }
 .app-shell--dark .calendar-grid { border-color: rgba(143,179,197,.25); background: rgba(143,179,197,.15); }
