@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { isCompletedFocusTransition } from './celebration'
 import ProgressPage from './components/ProgressPage'
 import RecoveryNotice from './components/RecoveryNotice'
@@ -48,6 +48,13 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
   const [darkMode, setDarkMode] = useState(() => window.localStorage.getItem('focus-companion:theme') === 'dark')
   const [celebrating, setCelebrating] = useState(false)
   const previousSnapshot = useRef(snapshot)
+  const celebrationTimer = useRef<number | undefined>(undefined)
+
+  const triggerCelebration = useCallback((): void => {
+    setCelebrating(true)
+    if (celebrationTimer.current !== undefined) window.clearTimeout(celebrationTimer.current)
+    celebrationTimer.current = window.setTimeout(() => { setCelebrating(false); celebrationTimer.current = undefined }, 3600)
+  }, [])
 
   useEffect(() => {
     window.localStorage.setItem('focus-companion:theme', darkMode ? 'dark' : 'light')
@@ -57,11 +64,9 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
   useEffect(() => {
     const previous = previousSnapshot.current
     previousSnapshot.current = snapshot
-    if (!isCompletedFocusTransition(previous, snapshot)) return
-    setCelebrating(true)
-    const timeout = window.setTimeout(() => setCelebrating(false), 3600)
-    return () => window.clearTimeout(timeout)
-  }, [snapshot])
+    if (isCompletedFocusTransition(previous, snapshot)) triggerCelebration()
+  }, [snapshot, triggerCelebration])
+  useEffect(() => () => { if (celebrationTimer.current !== undefined) window.clearTimeout(celebrationTimer.current) }, [])
 
   return <div className={darkMode ? 'app-shell app-shell--dark' : 'app-shell'}>
     <nav className="app-nav" aria-label="Main navigation">
@@ -69,7 +74,7 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
       <div className="app-nav__links"><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button><button className="app-nav__tab app-nav__tab--quiet" type="button" disabled title="Friends will arrive with accounts and cloud sync">Friends</button></div>
       <div className="app-nav__meta"><span>2 days back this week</span><button type="button" aria-label={darkMode ? 'Use light mode' : 'Use dark mode'} aria-pressed={darkMode} className="app-nav__settings" onClick={() => setDarkMode((value) => !value)}>{darkMode ? '☀' : '☾'}</button></div>
     </nav>
-    {view === 'focus' ? <StudyDesk snapshot={snapshot} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} /> : <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} />}
+    {view === 'focus' ? <StudyDesk snapshot={snapshot} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} onTaskComplete={triggerCelebration} /> : <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} />}
     <FloatingCompanion phase={snapshot.phase} page={view} celebrating={celebrating} />
   </div>
 }

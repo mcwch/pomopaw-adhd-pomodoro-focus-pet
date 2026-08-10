@@ -4,9 +4,9 @@ import { addTodayTask, loadTodayTasks, saveTodayTasks, toggleTodayTask, type Tod
 import FocusCanvas from './FocusCanvas'
 import TodayRail from './TodayRail'
 
-export interface StudyDeskProps { readonly snapshot: TimerSnapshot; readonly onStart: (title: string) => void; readonly onPause: () => void; readonly onResume: () => void; readonly onEndEarly: () => void }
+export interface StudyDeskProps { readonly snapshot: TimerSnapshot; readonly onStart: (title: string) => void; readonly onPause: () => void; readonly onResume: () => void; readonly onEndEarly: () => void; readonly onTaskComplete?: () => void }
 
-export default function StudyDesk({ snapshot, onStart, onPause, onResume, onEndEarly }: StudyDeskProps): React.JSX.Element {
+export default function StudyDesk({ snapshot, onStart, onPause, onResume, onEndEarly, onTaskComplete }: StudyDeskProps): React.JSX.Element {
   const [tasks, setTasks] = useState<TodayTask[]>(() => loadTodayTasks())
   const [selectedTask, setSelectedTask] = useState(() => loadTodayTasks().find((task) => !task.completed)?.title ?? '')
   const addTask = (title: string): boolean => {
@@ -14,6 +14,12 @@ export default function StudyDesk({ snapshot, onStart, onPause, onResume, onEndE
     if (result.added) { setTasks(result.tasks); setSelectedTask((current) => current || title.trim()); saveTodayTasks(result.tasks) }
     return result.added
   }
-  const toggleTask = (id: string): void => { const next = toggleTodayTask(tasks, id); setTasks(next); saveTodayTasks(next) }
+  const toggleTask = (id: string): void => {
+    const previous = tasks.find((task) => task.id === id)
+    const next = toggleTodayTask(tasks, id)
+    setTasks(next)
+    saveTodayTasks(next)
+    if (previous && !previous.completed && next.some((task) => task.id === id && task.completed)) onTaskComplete?.()
+  }
   return <main className="study-desk"><TodayRail tasks={tasks} onAdd={addTask} onToggle={toggleTask} onChoose={setSelectedTask} /><FocusCanvas snapshot={snapshot} selectedTask={selectedTask} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} /></main>
 }

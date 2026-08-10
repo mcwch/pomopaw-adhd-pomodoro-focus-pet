@@ -42,6 +42,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
   const [position, setPosition] = useState<FloatingPosition>(() => clampPosition(readPosition()))
   const [hidden, setHidden] = useState(false)
   const [dragging, setDragging] = useState(false)
+  const [idleBlink, setIdleBlink] = useState(false)
   const dragOffset = useRef<FloatingPosition>({ x: 0, y: 0 })
 
   const status = useMemo(() => {
@@ -50,7 +51,16 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
     if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return 'Blue-maned lion resting during a break'
     return page === 'progress' ? 'Blue-maned lion keeping your place' : 'Blue-maned lion companion ready to study'
   }, [celebrating, page, phase])
-  const action = dragging ? 'walk' : celebrating ? 'celebrate' : phase === 'focus' ? 'study' : phase === 'short_break' || phase === 'long_break' || phase === 'paused' ? 'stretch' : 'idle'
+  useEffect(() => {
+    if (phase !== 'idle' || celebrating || dragging) {
+      setIdleBlink(false)
+      return
+    }
+    const interval = window.setInterval(() => setIdleBlink((current) => !current), 60_000)
+    return () => window.clearInterval(interval)
+  }, [celebrating, dragging, phase])
+
+  const action = dragging ? 'walk' : celebrating ? 'celebrate' : phase === 'focus' ? 'study' : phase === 'short_break' || phase === 'long_break' || phase === 'paused' ? 'stretch' : idleBlink ? 'blink' : 'idle'
 
   useEffect(() => {
     const onResize = (): void => setPosition((current) => clampPosition(current))
