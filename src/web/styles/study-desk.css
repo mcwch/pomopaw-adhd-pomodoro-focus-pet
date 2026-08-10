@@ -423,3 +423,19 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .floating-companion__pet img { filter: drop-shadow(0 11px 8px rgba(0,0,0,.34)) saturate(1.1) brightness(1.04); }
 @keyframes companion-hop { 0% { transform: translateY(0) rotate(0); } 45% { transform: translateY(-12px) rotate(-2deg) scale(1.02); } 100% { transform: translateY(0) rotate(0); } }
 @keyframes companion-walk { 0%, 100% { transform: translate(0, 0) rotate(-1deg) scaleY(1); } 25% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } 50% { transform: translate(6px, 0) rotate(-1deg) scaleY(1); } 75% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } }
+
+/* Stitch action sheet: 3x2 frames — idle, study, blink / stretch, walk, celebrate. */
+.floating-companion { width: 220px; }
+.floating-companion__pet { width: 220px; height: 196px; }
+.floating-companion__sprite { position: relative; display: block; width: 210px; height: 178px; overflow: hidden; animation: companion-idle 3.6s ease-in-out infinite; }
+.floating-companion__sprite img { position: absolute; top: 0; left: 0; width: 630px; height: 356px; max-width: none; object-fit: fill; filter: saturate(1.16) contrast(1.08) drop-shadow(0 11px 8px rgba(20,61,88,.22)); animation: none; transform: none; pointer-events: none; }
+.floating-companion__sprite--study img { left: -210px; }
+.floating-companion__sprite--blink img { left: -420px; }
+.floating-companion__sprite--stretch img { top: -178px; }
+.floating-companion__sprite--walk img { top: -178px; left: -210px; }
+.floating-companion__sprite--celebrate img { top: -178px; left: -420px; }
+.floating-companion__pet:hover .floating-companion__sprite { animation: companion-hop .46s cubic-bezier(.2,.85,.35,1.25); }
+.floating-companion--dragging .floating-companion__sprite { animation: companion-walk .62s ease-in-out infinite; }
+.floating-companion--celebrating .floating-companion__sprite { animation: companion-celebrate .58s ease-in-out 5 alternate; }
+.app-shell--dark .floating-companion__sprite img { filter: saturate(1.2) contrast(1.1) brightness(1.05) drop-shadow(0 12px 9px rgba(0,0,0,.34)); }
+@media (prefers-reduced-motion: reduce) { .floating-companion__sprite, .floating-companion--dragging .floating-companion__sprite, .floating-companion--celebrating .floating-companion__sprite { animation: none; } }
