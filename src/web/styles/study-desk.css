@@ -308,6 +308,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .app-nav__tab, .app-shell--dark .app-nav__meta, .app-shell--dark .eyebrow, .app-shell--dark .rail-heading p, .app-shell--dark .task-choice, .app-shell--dark .task-toggle, .app-shell--dark .quiet-copy, .app-shell--dark .progress-page__intro > p:last-child, .app-shell--dark .progress-page__note, .app-shell--dark .progress-stat span, .app-shell--dark .calendar-weekdays, .app-shell--dark .calendar-legend, .app-shell--dark .corner-scene__copy > p:last-child, .app-shell--dark .corner-scene__count, .app-shell--dark .friends-cta p { color: var(--muted); }
 .app-shell--dark .app-nav__tab--active { border-color: var(--mint); }
 .app-shell--dark .focus-task-pill, .app-shell--dark .ai-helper, .app-shell--dark .ai-helper__thinking, .app-shell--dark .ai-helper__result, .app-shell--dark .sound-controls__main, .app-shell--dark .sound-controls__options, .app-shell--dark .progress-stat, .app-shell--dark .friends-cta, .app-shell--dark .milestone-list span { background: var(--surface-low); border-color: rgba(143,179,197,.24); }
+.app-shell--dark .focus-canvas { background: var(--surface); }
 .app-shell--dark .sound-controls__options { background: var(--surface-low); }
 .app-shell--dark .sound-controls__option { color: var(--muted); }
 .app-shell--dark .sound-controls__option:hover { background: var(--surface-lowest); color: var(--primary); }
@@ -315,6 +316,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .timer-ring { background: radial-gradient(circle, #0d425d 0 66%, #0a3851 67% 100%); border-color: var(--mint); box-shadow: 0 0 0 10px rgba(120,215,198,.1); }
 .app-shell--dark .focus-canvas time { color: var(--primary); }
 .app-shell--dark .primary-action, .app-shell--dark .focus-start { background: var(--mint); color: #062d43; box-shadow: 0 5px 0 #4cae9d; }
+.app-shell--dark .milestones .primary-action { border: 0; box-shadow: none; }
 .app-shell--dark .secondary-action, .app-shell--dark .ai-helper__result button, .app-shell--dark .ai-helper__ask { border-color: var(--outline); color: var(--primary); }
 .app-shell--dark .secondary-action:hover, .app-shell--dark .ai-helper__result button:hover, .app-shell--dark .ai-helper__ask:hover { background: var(--surface-lowest); }
 .app-shell--dark .add-task input, .app-shell--dark .focus-task-form input { background: var(--surface-lowest) !important; border-color: var(--outline); color: var(--primary); }

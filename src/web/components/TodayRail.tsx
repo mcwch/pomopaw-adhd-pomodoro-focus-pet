@@ -53,7 +53,7 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
         {suggestion && <div className="ai-helper__result"><span>Try this:</span><strong>{suggestion}</strong><button type="button" onClick={useSuggestion}>Use this step</button></div>}
         {aiMessage && <p className="ai-helper__message" role="status">{aiMessage}</p>}
       </div>
-      <button type="button" className="ai-helper__ask" onClick={() => void askLocalAi}><span aria-hidden="true">↻</span>Ask local AI</button>
+      <button type="button" className="ai-helper__ask" onClick={() => void askLocalAi()}><span aria-hidden="true">↻</span>Ask local AI</button>
     </section>
     <form className="add-task" onSubmit={addTask}><label htmlFor="today-task">Add a small task for today</label><div><input id="today-task" value={title} onChange={(event) => { setTitle(event.target.value); setAtLimit(false) }} placeholder="e.g. read two pages" autoComplete="off" /><button type="submit">Add task</button></div></form>
     {atLimit ? <p className="limit-copy">Finish or mark one task done before adding another.</p> : <p className="quiet-copy">{activeCount}/3 active tasks. Keep this list deliberately small.</p>}
