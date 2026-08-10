@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TimerPhase } from '../../shared/timer'
-import stitchStudyLion from '../assets/lion/stitch-study-desk-transparent.png'
+import referenceLionActions from '../assets/lion/reference-lion-actions-sprite-sheet.png'
 
 interface FloatingPosition {
   readonly x: number
@@ -16,7 +16,7 @@ export interface FloatingCompanionProps {
 const POSITION_KEY = 'focus-companion:floating-position'
 
 function defaultPosition(): FloatingPosition {
-  return { x: Math.max(16, window.innerWidth - 224), y: Math.max(92, window.innerHeight - 214) }
+  return { x: Math.max(16, window.innerWidth - 234), y: Math.max(92, window.innerHeight - 250) }
 }
 
 function readPosition(): FloatingPosition {
@@ -30,8 +30,8 @@ function readPosition(): FloatingPosition {
 }
 
 function clampPosition(position: FloatingPosition): FloatingPosition {
-  const width = 190
-  const height = 182
+  const width = 220
+  const height = 236
   return {
     x: Math.min(Math.max(10, position.x), Math.max(10, window.innerWidth - width)),
     y: Math.min(Math.max(76, position.y), Math.max(76, window.innerHeight - height)),
@@ -50,6 +50,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
     if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return 'Blue-maned lion resting during a break'
     return page === 'progress' ? 'Blue-maned lion keeping your place' : 'Blue-maned lion companion ready to study'
   }, [celebrating, page, phase])
+  const action = dragging ? 'walk' : celebrating ? 'celebrate' : phase === 'focus' ? 'study' : phase === 'short_break' || phase === 'long_break' || phase === 'paused' ? 'stretch' : 'idle'
 
   useEffect(() => {
     const onResize = (): void => setPosition((current) => clampPosition(current))
@@ -95,7 +96,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
         setDragging(true)
       }}
     >
-      <img src={stitchStudyLion} alt={status} draggable="false" />
+      <span className={`floating-companion__sprite floating-companion__sprite--${action}`}><img src={referenceLionActions} alt={status} draggable="false" /></span>
     </button>
     <button className="floating-companion__hide" type="button" onClick={() => setHidden(true)} aria-label="Hide study companion">×</button>
   </aside>
