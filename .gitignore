@@ -28,3 +28,5 @@ src/web/assets/lion/paused-chromakey.png
 src/web/assets/lion/paused.png
 src/web/assets/lion/reference-lion-actions-sprite-sheet.png
 src/web/assets/lion/stitch-study-desk-transparent.png
+src/renderer/src/assets/electron.svg
+src/renderer/src/assets/wavy-lines.svg
