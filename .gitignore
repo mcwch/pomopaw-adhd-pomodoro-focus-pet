@@ -14,4 +14,5 @@ test-results/
 .env*
 .stitch/
 .stitch-*-result.json
+docs/superpowers/
 src/web/assets/lion/*-source.png

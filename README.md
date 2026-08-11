@@ -8,6 +8,8 @@
 
 PomoPaw is a local-first focus companion for people who want a dependable Pomodoro timer without turning productivity into pressure. A blue-maned lion studies alongside you, reacts to focus state, and makes progress visible through a warm study corner, daily calendar, stars, and gentle social previews.
 
+The visual direction was prototyped with Stitch and then refined into the React/Electron implementation. This repository documents the product and implementation, not private design prompts or internal planning materials.
+
 ## Try it
 
 - **Web demo:** [focus-companion-indol.vercel.app](https://focus-companion-indol.vercel.app)
