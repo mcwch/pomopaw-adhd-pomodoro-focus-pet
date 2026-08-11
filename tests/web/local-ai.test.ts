@@ -2,6 +2,18 @@ import { describe, expect, it } from 'vitest'
 import { getLocalFirstStep } from '../../src/web/local-ai'
 
 describe('web local AI helper', () => {
+  it('tries the cloud first-step proxy before local Ollama', async () => {
+    const urls: string[] = []
+    const result = await getLocalFirstStep('Write my literature review', async (url, init) => {
+      urls.push(url)
+      expect(JSON.parse(String(init?.body))).toEqual({ task: 'Write my literature review' })
+      return new Response(JSON.stringify({ available: true, suggestion: 'Open the document and write one heading.' }), { status: 200 })
+    })
+
+    expect(result).toEqual({ available: true, suggestion: 'Open the document and write one heading.' })
+    expect(urls[0]).toBe('/api/ai/first-step')
+  })
+
   it('requests one concise first step from the local Qwen model', async () => {
     let request: RequestInit | undefined
     const result = await getLocalFirstStep('Write my literature review', async (_url, init) => {

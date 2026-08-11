@@ -18,6 +18,22 @@ Run the focused reliability suite with `npm run test:reliable-timer`. Before cre
 $ npm install
 ```
 
+### Optional cloud task helper
+
+The web task helper uses Mistral first and falls back to local Ollama when the
+cloud endpoint is unavailable. Keep the Mistral key in the server environment;
+do not prefix it with `VITE_` and do not put it in browser code.
+
+On Windows PowerShell:
+
+```powershell
+[Environment]::SetEnvironmentVariable("ADHD_APP_MISTRAL_API_KEY", "your-key", "User")
+```
+
+Restart the development server after changing the variable. Mistral Free mode
+has usage and rate limits; the app shows a gentle unavailable message when the
+quota or network is unavailable.
+
 ### Development
 
 ```bash

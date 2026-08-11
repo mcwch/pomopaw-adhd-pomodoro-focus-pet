@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { appReadyRequestSchema, timerStartRequestSchema, recoveryActionRequestSchema, overlayVisibilityRequestSchema, ollamaFirstStepRequestSchema, ollamaFirstStepResponseSchema, ollamaStatusResponseSchema } from '../../src/shared/ipc'
+import { appReadyRequestSchema, timerStartRequestSchema, recoveryActionRequestSchema, overlayVisibilityRequestSchema, ollamaFirstStepRequestSchema, ollamaFirstStepResponseSchema, ollamaStatusResponseSchema, mistralFirstStepRequestSchema, mistralFirstStepResponseSchema } from '../../src/shared/ipc'
 describe('app-ready IPC request', () => { it('rejects renderer data outside the empty request contract', () => { expect(appReadyRequestSchema.safeParse({}).success).toBe(true); expect(appReadyRequestSchema.safeParse({ unexpected: true }).success).toBe(false) }) })
 
 describe('local AI IPC response', () => {
@@ -31,5 +31,13 @@ describe('local AI first-step IPC contract', () => {
     expect(ollamaFirstStepRequestSchema.safeParse({ task: 'Outline my report' }).success).toBe(true)
     expect(ollamaFirstStepRequestSchema.safeParse({ task: '' }).success).toBe(false)
     expect(ollamaFirstStepResponseSchema.safeParse({ suggestion: null }).success).toBe(true)
+  })
+})
+
+describe('cloud AI first-step IPC contract', () => {
+  it('accepts the same bounded task and nullable response shape', () => {
+    expect(mistralFirstStepRequestSchema.safeParse({ task: 'Outline my report' }).success).toBe(true)
+    expect(mistralFirstStepRequestSchema.safeParse({ task: '' }).success).toBe(false)
+    expect(mistralFirstStepResponseSchema.safeParse({ suggestion: null }).success).toBe(true)
   })
 })

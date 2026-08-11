@@ -4,7 +4,7 @@ import LocalAiStatus from '../../src/renderer/src/components/LocalAiStatus'
 
 describe('LocalAiStatus', () => {
   it('shows that local AI is ready without exposing task text outside the computer', async () => {
-    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn().mockResolvedValue({ available: true, models: ['qwen2.5:3b'] }) }
+    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn().mockResolvedValue({ available: true, models: ['qwen2.5:3b'] }), mistralFirstStep: vi.fn().mockResolvedValue({ suggestion: null }) }
     render(<LocalAiStatus />)
 
     expect(await screen.findByText('Local AI ready: qwen2.5:3b')).toBeTruthy()
@@ -12,7 +12,7 @@ describe('LocalAiStatus', () => {
   })
 
   it('explains the optional setup when Ollama is absent', async () => {
-    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn().mockResolvedValue({ available: false, models: [] }) }
+    window.focusApp = { appReady: vi.fn(), ollamaStatus: vi.fn().mockResolvedValue({ available: false, models: [] }), mistralFirstStep: vi.fn().mockResolvedValue({ suggestion: null }) }
     render(<LocalAiStatus />)
 
     expect(await screen.findByText(/Optional local AI is not set up yet/i)).toBeTruthy()

@@ -3,9 +3,10 @@ import { join } from 'path'
 import { randomUUID } from 'node:crypto'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { appReadyRequestSchema, ollamaFirstStepRequestSchema, overlayVisibilityRequestSchema } from '../shared/ipc'
+import { appReadyRequestSchema, mistralFirstStepRequestSchema, ollamaFirstStepRequestSchema, overlayVisibilityRequestSchema } from '../shared/ipc'
 import { createTrayController } from './tray'
 import { detectLocalOllama, getFirstStepFromLocalOllama } from './ollama'
+import { requestMistralFirstStep } from '../server/mistral'
 import { createOverlayController, overlayWindowOptions } from './windows'
 import { StateRepository } from './persistence'
 import { TimerController } from './timer-controller'
@@ -75,6 +76,10 @@ app.whenReady().then(async () => {
   ipcMain.handle('ollama:first-step', (_event, request: unknown) => {
     const { task } = ollamaFirstStepRequestSchema.parse(request)
     return getFirstStepFromLocalOllama(task).then((suggestion) => ({ suggestion }))
+  })
+  ipcMain.handle('mistral:first-step', (_event, request: unknown) => {
+    const { task } = mistralFirstStepRequestSchema.parse(request)
+    return requestMistralFirstStep(task, process.env.ADHD_APP_MISTRAL_API_KEY ?? '').then(({ suggestion }) => ({ suggestion }))
   })
 
   ipcMain.handle('overlay:visibility', (_event, request: unknown) => {

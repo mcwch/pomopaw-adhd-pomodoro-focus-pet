@@ -6,6 +6,7 @@ const focusApp: FocusAppApi = {
   appReady: () => ipcRenderer.invoke('app:ready', {}),
   ollamaStatus: () => ipcRenderer.invoke('ollama:status'),
   ollamaFirstStep: (task) => ipcRenderer.invoke('ollama:first-step', { task }),
+  mistralFirstStep: (task) => ipcRenderer.invoke('mistral:first-step', { task }),
   setOverlayVisible: (request) => ipcRenderer.invoke('overlay:visibility', request),
   timerState: () => ipcRenderer.invoke('timer:state', {}),
   timerHydrate: () => ipcRenderer.invoke('timer:hydrate', {}),
