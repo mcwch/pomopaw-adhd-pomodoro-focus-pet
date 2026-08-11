@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TimerPhase } from '../../shared/timer'
-import referenceLionActions from '../assets/lion/reference-lion-actions-sprite-sheet.png'
+import idleLion from '../assets/lion/highres-lion-idle.png'
+import studyLion from '../assets/lion/highres-lion-study.png'
+import blinkLion from '../assets/lion/highres-lion-blink.png'
+import stretchLion from '../assets/lion/highres-lion-stretch.png'
+import walkLion from '../assets/lion/highres-lion-walk.png'
+import celebrateLion from '../assets/lion/highres-lion-celebrate.png'
 
 interface FloatingPosition {
   readonly x: number
@@ -61,6 +66,14 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
   }, [celebrating, dragging, phase])
 
   const action = dragging ? 'walk' : celebrating ? 'celebrate' : phase === 'focus' ? 'study' : phase === 'short_break' || phase === 'long_break' || phase === 'paused' ? 'stretch' : idleBlink ? 'blink' : 'idle'
+  const actionImage = {
+    idle: idleLion,
+    study: studyLion,
+    blink: blinkLion,
+    stretch: stretchLion,
+    walk: walkLion,
+    celebrate: celebrateLion,
+  }[action]
 
   useEffect(() => {
     const onResize = (): void => setPosition((current) => clampPosition(current))
@@ -106,7 +119,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
         setDragging(true)
       }}
     >
-      <span className={`floating-companion__sprite floating-companion__sprite--${action}`}><img src={referenceLionActions} alt={status} draggable="false" /></span>
+      <span className={`floating-companion__sprite floating-companion__sprite--${action}`}><img src={actionImage} alt={status} draggable="false" /></span>
     </button>
     <button className="floating-companion__hide" type="button" onClick={() => setHidden(true)} aria-label="Hide study companion">×</button>
   </aside>
