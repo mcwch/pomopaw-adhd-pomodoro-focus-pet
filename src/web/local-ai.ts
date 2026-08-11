@@ -5,11 +5,6 @@ type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 const MISTRAL_PROXY = '/api/ai/first-step'
 const LOCAL_AI_TIMEOUT_MS = 20_000
 
-function finalAnswer(raw: string): string | null {
-  const afterThinking = raw.replace(/^[\s\S]*?<\/think>\s*/i, '').replace(/<think>[\s\S]*?<\/think>\s*/gi, '').trim()
-  return afterThinking || null
-}
-
 export async function getLocalFirstStep(task: string, fetchLike: FetchLike = fetch): Promise<LocalAiResult> {
   const cleanedTask = task.trim()
   if (!cleanedTask) return { suggestion: null, available: true }

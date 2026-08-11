@@ -13,12 +13,16 @@ describe('TodayRail', () => {
     expect(onAdd).toHaveBeenCalledWith('Read two pages')
   })
 
-  it('shows an immediate explanation when there is no task for AI to help with', async () => {
-    const user = userEvent.setup()
+  it('requires a question before asking AI', () => {
     render(<TodayRail tasks={[]} onAdd={vi.fn()} onToggle={vi.fn()} onChoose={vi.fn()} />)
 
-    await user.click(screen.getByRole('button', { name: 'Ask AI' }))
+    expect((screen.getByRole('button', { name: 'Ask AI' }) as HTMLButtonElement).disabled).toBe(true)
+  })
 
-    expect(screen.getByRole('status').textContent).toContain('Add a task first')
+  it('accepts a separate question for the AI helper', async () => {
+    render(<TodayRail tasks={[]} onAdd={vi.fn()} onToggle={vi.fn()} onChoose={vi.fn()} />)
+
+    await userEvent.setup().type(screen.getByLabelText('What feels hard right now?'), 'I cannot start my literature review')
+    expect((screen.getByRole('button', { name: 'Ask AI' }) as HTMLButtonElement).disabled).toBe(false)
   })
 })

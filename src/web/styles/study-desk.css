@@ -257,6 +257,9 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .ai-helper__heading span { margin-top: 1px; color: #1d8c78; font-size: .9rem; }
 .ai-helper h3 { margin: 0; font-size: .72rem; line-height: 1.35; }
 .ai-helper__prompt { margin: -5px 0 0; color: var(--muted); font-size: .68rem; line-height: 1.45; }
+.ai-helper__input-label { color: var(--muted); font-size: .65rem; font-weight: 700; }
+.ai-helper__input { width: 100%; box-sizing: border-box; border: 1px solid rgba(103,134,155,.3); border-radius: 8px; background: var(--surface-lowest); color: var(--primary); padding: 9px 10px; font: inherit; font-size: .68rem; }
+.ai-helper__input:focus { outline: 2px solid var(--mint); outline-offset: 1px; }
 .ai-helper__body { display: grid; gap: 8px; }
 .ai-helper__thinking, .ai-helper__result { padding: 10px; border: 1px solid rgba(103,134,155,.18); border-radius: 9px; background: var(--surface-lowest); }
 .ai-helper__thinking p { margin: 0; color: var(--muted); font-size: .7rem; }
@@ -268,6 +271,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .ai-helper__result button, .ai-helper__ask { border: 1px solid var(--primary); border-radius: 7px; background: transparent; color: var(--primary); padding: 7px 9px; font-size: .67rem; font-weight: 700; }
 .ai-helper__result button:hover, .ai-helper__ask:hover { background: var(--primary); color: #fff; }
 .ai-helper__ask { width: 100%; }
+.ai-helper__ask:disabled { cursor: not-allowed; opacity: .5; }
 .ai-helper__ask span { margin-right: 5px; }
 .ai-helper__message { margin: 0; color: var(--muted); font-size: .66rem; line-height: 1.45; }
 .today-task-list ol { margin-top: 20px; }

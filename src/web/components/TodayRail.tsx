@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { TodayTask } from '../today-tasks'
 import { getLocalFirstStep } from '../local-ai'
 
@@ -17,7 +17,7 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
   const [suggestion, setSuggestion] = useState<string | null>(null)
   const [aiMessage, setAiMessage] = useState('')
   const activeCount = tasks.filter((task) => !task.completed).length
-  const aiTask = useMemo(() => title.trim() || tasks.find((task) => !task.completed)?.title || '', [tasks, title])
+  const [aiQuestion, setAiQuestion] = useState('')
 
   const addTask = (event: React.FormEvent): void => {
     event.preventDefault()
@@ -27,9 +27,10 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
   }
 
   const askAi = async (): Promise<void> => {
-    if (!aiTask) { setAiMessage('Add a task first, then I can help you choose the first step.'); return }
+    const question = aiQuestion.trim()
+    if (!question) { setAiMessage('Tell me what feels hard right now, then I can help you choose the first step.'); return }
     setThinking(true); setSuggestion(null); setAiMessage('')
-    const result = await getLocalFirstStep(aiTask)
+    const result = await getLocalFirstStep(question)
     setThinking(false)
     if (result.suggestion) setSuggestion(result.suggestion)
     else setAiMessage(result.available ? 'I could not find a smaller step yet. Try a little more detail.' : 'AI is unavailable right now. You can still start with one tiny action.')
@@ -49,12 +50,14 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
     <section className="ai-helper" aria-label="AI task helper">
       <div className="ai-helper__heading"><span aria-hidden="true">✦</span><h3>Not sure what to do first?</h3></div>
       <p className="ai-helper__prompt">Tell AI what&apos;s on your mind and it&apos;ll help you choose one small step.</p>
+      <label className="ai-helper__input-label" htmlFor="ai-question">What feels hard right now?</label>
+      <input id="ai-question" className="ai-helper__input" value={aiQuestion} onChange={(event) => { setAiQuestion(event.target.value); setAiMessage(''); setSuggestion(null) }} placeholder="e.g. I need to start my literature review" autoComplete="off" />
       <div className="ai-helper__body">
         {thinking && <div className="ai-helper__thinking"><p>Thinking...</p><span aria-hidden="true">...</span></div>}
         {suggestion && <div className="ai-helper__result"><span>Try this:</span><strong>{suggestion}</strong><button type="button" onClick={useSuggestion}>Use this step</button></div>}
         {aiMessage && <p className="ai-helper__message" role="status">{aiMessage}</p>}
       </div>
-      <button type="button" className="ai-helper__ask" onClick={() => void askAi()}><span aria-hidden="true">↻</span>Ask AI</button>
+      <button type="button" className="ai-helper__ask" disabled={!aiQuestion.trim() || thinking} onClick={() => void askAi()}><span aria-hidden="true">↻</span>{thinking ? 'Thinking...' : 'Ask AI'}</button>
     </section>
     <form className="add-task" onSubmit={addTask}><label htmlFor="today-task">Add a small task for today</label><div><input id="today-task" value={title} onChange={(event) => { setTitle(event.target.value); setAtLimit(false) }} placeholder="e.g. read two pages" autoComplete="off" /><button type="submit">Add task</button></div></form>
     {atLimit ? <p className="limit-copy">Finish or mark one task done before adding another.</p> : <p className="quiet-copy">{activeCount}/3 active tasks. Keep this list deliberately small.</p>}
