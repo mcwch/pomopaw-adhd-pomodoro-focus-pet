@@ -16,3 +16,15 @@ test-results/
 .stitch-*-result.json
 docs/superpowers/
 src/web/assets/lion/*-source.png
+src/web/assets/lion/break-chromakey.png
+src/web/assets/lion/break.png
+src/web/assets/lion/celebrate-chromakey.png
+src/web/assets/lion/celebrate.png
+src/web/assets/lion/focus-chromakey.png
+src/web/assets/lion/focus.png
+src/web/assets/lion/idle-chromakey.png
+src/web/assets/lion/idle.png
+src/web/assets/lion/paused-chromakey.png
+src/web/assets/lion/paused.png
+src/web/assets/lion/reference-lion-actions-sprite-sheet.png
+src/web/assets/lion/stitch-study-desk-transparent.png
