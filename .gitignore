@@ -1,5 +1,6 @@
 .worktrees/
 node_modules/
+.eslintcache
 .env
 .env.*
 !.env.example
