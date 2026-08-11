@@ -459,3 +459,43 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
   animation: none;
   transform: none;
 }
+
+/* Navigation and typography polish: clearer hierarchy, centered tabs, gentle feedback. */
+.app-nav { gap: 28px; }
+.app-nav__brand { font-size: 1.1rem; white-space: nowrap; }
+.app-nav__links { flex: 1; justify-content: center; gap: 40px; }
+.app-nav__tab { position: relative; padding: 0 10px; font-size: .92rem; transition: transform .18s ease, color .18s ease, background-color .18s ease, box-shadow .18s ease; }
+.app-nav__tab:not(:disabled):hover { transform: translateY(-3px); border-radius: 10px; background: #edf8f5; color: #0d735f; box-shadow: 0 6px 12px rgba(20, 61, 88, .08); }
+.app-nav__tab--active:not(:disabled):hover { background: #e6f7f3; }
+.app-nav__tab--quiet:hover { color: #507a89; }
+.app-nav__meta { font-size: .78rem; }
+.rail-heading h2 { font-size: 1.65rem; }
+.rail-heading p { font-size: 1.02rem; }
+.today-rail .task-choice { font-size: .82rem; }
+.add-task label { font-size: .82rem; }
+.quiet-copy, .limit-copy { font-size: .82rem; }
+.focus-task-pill { font-size: .78rem; }
+.focus-task-form label { font-size: .8rem !important; }
+.sound-controls__main, .sound-controls__option { font-size: .76rem; }
+.ai-helper h3 { font-size: .82rem; }
+.ai-helper__prompt { font-size: .76rem; }
+.ai-helper__input-label { font-size: .73rem; }
+.ai-helper__input { font-size: .76rem; }
+.ai-helper__result strong { font-size: .82rem; }
+.ai-helper__result button, .ai-helper__ask { font-size: .75rem; }
+.progress-page__intro > p:last-child { font-size: 1.05rem; }
+.calendar-weekdays { font-size: .74rem; }
+.calendar-day { font-size: .78rem; }
+.calendar-day__number { font-size: .92rem; }
+.calendar-day__minutes { font-size: .68rem; }
+.progress-stat span { font-size: .82rem; }
+.milestones h2 { font-size: 1.1rem; }
+.milestone-list span { font-size: .72rem; }
+.progress-stat, .milestone-list span, .friends-cta { transition: transform .18s ease, box-shadow .18s ease; }
+.progress-stat:hover, .milestone-list span:hover, .friends-cta:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(20, 61, 88, .08); }
+
+@media (max-width: 720px) {
+  .app-nav__links { gap: 18px; }
+  .app-nav__tab { padding: 0 5px; font-size: .84rem; }
+  .app-nav__brand { font-size: .98rem; }
+}
