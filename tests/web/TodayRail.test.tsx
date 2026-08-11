@@ -13,11 +13,11 @@ describe('TodayRail', () => {
     expect(onAdd).toHaveBeenCalledWith('Read two pages')
   })
 
-  it('shows an immediate explanation when there is no task for local AI to shrink', async () => {
+  it('shows an immediate explanation when there is no task for AI to help with', async () => {
     const user = userEvent.setup()
     render(<TodayRail tasks={[]} onAdd={vi.fn()} onToggle={vi.fn()} onChoose={vi.fn()} />)
 
-    await user.click(screen.getByRole('button', { name: 'Ask local AI' }))
+    await user.click(screen.getByRole('button', { name: 'Ask AI' }))
 
     expect(screen.getByRole('status').textContent).toContain('Add a task first')
   })

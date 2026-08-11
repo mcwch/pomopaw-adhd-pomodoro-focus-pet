@@ -26,13 +26,13 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
     if (added !== false) { setTitle(''); setSuggestion(null); setAiMessage('') }
   }
 
-  const askLocalAi = async (): Promise<void> => {
-    if (!aiTask) { setAiMessage('Add a task first, then I can shrink it into one step.'); return }
+  const askAi = async (): Promise<void> => {
+    if (!aiTask) { setAiMessage('Add a task first, then I can help you choose the first step.'); return }
     setThinking(true); setSuggestion(null); setAiMessage('')
     const result = await getLocalFirstStep(aiTask)
     setThinking(false)
     if (result.suggestion) setSuggestion(result.suggestion)
-    else setAiMessage(result.available ? 'I could not find a smaller step yet. Try a little more detail.' : 'Local AI is unavailable. Focus Companion still works without it.')
+    else setAiMessage(result.available ? 'I could not find a smaller step yet. Try a little more detail.' : 'AI is unavailable right now. You can still start with one tiny action.')
   }
 
   const useSuggestion = (): void => {
@@ -46,14 +46,15 @@ export default function TodayRail({ tasks, onAdd, onToggle, onChoose, onUseSugge
   return <aside className="today-rail" aria-label="Today">
     <div className="rail-heading"><h2>Choose one small thing.</h2><p>What&apos;s your focus today?</p></div>
     <div className="today-task-list"><ol>{tasks.map((task) => <li key={task.id} className={task.completed ? 'task-row task-row--complete' : 'task-row'}><button className="task-toggle" aria-label={task.completed ? `Mark ${task.title} not done` : `Mark ${task.title} done`} onClick={() => onToggle(task.id)}>{task.completed ? '✓' : ''}</button><button className="task-choice" onClick={() => onChoose(task.title)} disabled={task.completed}>{task.title}</button></li>)}</ol></div>
-    <section className="ai-helper" aria-label="Local AI task helper">
-      <div className="ai-helper__heading"><span aria-hidden="true">✦</span><h3>Help me shrink this into a first step.</h3></div>
+    <section className="ai-helper" aria-label="AI task helper">
+      <div className="ai-helper__heading"><span aria-hidden="true">✦</span><h3>Not sure what to do first?</h3></div>
+      <p className="ai-helper__prompt">Tell AI what&apos;s on your mind and it&apos;ll help you choose one small step.</p>
       <div className="ai-helper__body">
-        {thinking && <div className="ai-helper__thinking"><p>Thinking locally...</p><span aria-hidden="true">•••</span></div>}
+        {thinking && <div className="ai-helper__thinking"><p>Thinking...</p><span aria-hidden="true">...</span></div>}
         {suggestion && <div className="ai-helper__result"><span>Try this:</span><strong>{suggestion}</strong><button type="button" onClick={useSuggestion}>Use this step</button></div>}
         {aiMessage && <p className="ai-helper__message" role="status">{aiMessage}</p>}
       </div>
-      <button type="button" className="ai-helper__ask" onClick={() => void askLocalAi()}><span aria-hidden="true">↻</span>Ask local AI</button>
+      <button type="button" className="ai-helper__ask" onClick={() => void askAi()}><span aria-hidden="true">↻</span>Ask AI</button>
     </section>
     <form className="add-task" onSubmit={addTask}><label htmlFor="today-task">Add a small task for today</label><div><input id="today-task" value={title} onChange={(event) => { setTitle(event.target.value); setAtLimit(false) }} placeholder="e.g. read two pages" autoComplete="off" /><button type="submit">Add task</button></div></form>
     {atLimit ? <p className="limit-copy">Finish or mark one task done before adding another.</p> : <p className="quiet-copy">{activeCount}/3 active tasks. Keep this list deliberately small.</p>}

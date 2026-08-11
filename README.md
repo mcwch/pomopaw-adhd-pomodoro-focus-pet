@@ -32,7 +32,8 @@ On Windows PowerShell:
 
 Restart the development server after changing the variable. Mistral Free mode
 has usage and rate limits; the app shows a gentle unavailable message when the
-quota or network is unavailable.
+quota or network is unavailable. The AI helper is cloud-only by design; it does
+not require Ollama or a local Qwen model.
 
 ### Development
 

@@ -4,13 +4,13 @@ import { describe, expect, it, vi } from 'vitest'
 import LocalAiFirstStep from '../../src/renderer/src/components/LocalAiFirstStep'
 
 describe('LocalAiFirstStep', () => {
-  it('shows one private, actionable first step only after the user asks', async () => {
+  it('shows one actionable first step only after the user asks', async () => {
     const user = userEvent.setup()
     window.focusApp = {
       appReady: vi.fn(),
       ollamaStatus: vi.fn(),
-      mistralFirstStep: vi.fn().mockResolvedValue({ suggestion: null }),
-      ollamaFirstStep: vi.fn().mockResolvedValue({ suggestion: 'Open the report and write three bullet headings.' })
+      mistralFirstStep: vi.fn().mockResolvedValue({ suggestion: 'Open the report and write three bullet headings.' }),
+      ollamaFirstStep: vi.fn()
     }
     render(<LocalAiFirstStep task="Write my report" />)
 
@@ -19,10 +19,10 @@ describe('LocalAiFirstStep', () => {
     expect(await screen.findByText('Open the report and write three bullet headings.')).toBeTruthy()
   })
 
-  it('uses the cloud helper before falling back to the local model', async () => {
+  it('uses only the cloud helper', async () => {
     const user = userEvent.setup()
     const mistralFirstStep = vi.fn().mockResolvedValue({ suggestion: 'Open the report and write one heading.' })
-    const ollamaFirstStep = vi.fn().mockResolvedValue({ suggestion: 'Local fallback' })
+    const ollamaFirstStep = vi.fn()
     window.focusApp = {
       appReady: vi.fn(),
       ollamaStatus: vi.fn(),

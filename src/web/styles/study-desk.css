@@ -256,6 +256,7 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .ai-helper__heading { display: flex; align-items: flex-start; gap: 8px; color: var(--primary); }
 .ai-helper__heading span { margin-top: 1px; color: #1d8c78; font-size: .9rem; }
 .ai-helper h3 { margin: 0; font-size: .72rem; line-height: 1.35; }
+.ai-helper__prompt { margin: -5px 0 0; color: var(--muted); font-size: .68rem; line-height: 1.45; }
 .ai-helper__body { display: grid; gap: 8px; }
 .ai-helper__thinking, .ai-helper__result { padding: 10px; border: 1px solid rgba(103,134,155,.18); border-radius: 9px; background: var(--surface-lowest); }
 .ai-helper__thinking p { margin: 0; color: var(--muted); font-size: .7rem; }
