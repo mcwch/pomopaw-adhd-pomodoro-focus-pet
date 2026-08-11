@@ -5,6 +5,11 @@ export type LocalOllamaStatus = {
 
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 
+function finalAnswer(raw: string): string | null {
+  const afterThinking = raw.replace(/^[\s\S]*?<\/think>\s*/i, '').replace(/<think>[\s\S]*?<\/think>\s*/gi, '').trim()
+  return afterThinking || null
+}
+
 export async function detectLocalOllama(fetchLike: FetchLike = fetch): Promise<LocalOllamaStatus> {
   try {
     const response = await fetchLike('http://127.0.0.1:11434/api/tags')
@@ -32,8 +37,7 @@ export async function getFirstStepFromLocalOllama(task: string, fetchLike: Fetch
     if (!response.ok) return null
 
     const body = await response.json() as { response?: string }
-    const suggestion = body.response?.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trim()
-    return suggestion || null
+    return finalAnswer(body.response ?? '')
   } catch {
     return null
   }

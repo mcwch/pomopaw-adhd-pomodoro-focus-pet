@@ -13,6 +13,12 @@ describe('web local AI helper', () => {
     expect(JSON.parse(String(request?.body))).toMatchObject({ model: 'qwen3:4b', stream: false, think: false })
   })
 
+  it('keeps only the final answer when Qwen mixes a closing think marker into response', async () => {
+    const result = await getLocalFirstStep('Read two pages', async () => new Response(JSON.stringify({ response: 'private reasoning... </think>\n\nOpen the book to page one.' }), { status: 200 }))
+
+    expect(result).toEqual({ available: true, suggestion: 'Open the book to page one.' })
+  })
+
   it('fails softly when Ollama is not running', async () => {
     const result = await getLocalFirstStep('Review notes', async () => { throw new Error('connection refused') })
     expect(result).toEqual({ available: false, suggestion: null })

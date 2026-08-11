@@ -33,4 +33,10 @@ describe('getFirstStepFromLocalOllama', () => {
 
     expect(suggestion).toBe('Scan the headings and mark the three weakest sections.')
   })
+
+  it('removes a Qwen closing think marker before showing the first action', async () => {
+    const suggestion = await getFirstStepFromLocalOllama('Review lecture notes', async () => new Response(JSON.stringify({ response: 'private reasoning... </think>\n\nScan the headings and mark the three weakest sections.' }), { status: 200 }))
+
+    expect(suggestion).toBe('Scan the headings and mark the three weakest sections.')
+  })
 })
