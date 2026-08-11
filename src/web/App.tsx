@@ -4,6 +4,7 @@ import ProgressPage from './components/ProgressPage'
 import RecoveryNotice from './components/RecoveryNotice'
 import StudyDesk from './components/StudyDesk'
 import FloatingCompanion from './components/FloatingCompanion'
+import FriendsPage from './components/FriendsPage'
 import { useStudyStore } from './store'
 import './styles/study-desk.css'
 
@@ -44,7 +45,7 @@ interface AppViewsProps {
 }
 
 function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndEarly }: AppViewsProps): React.JSX.Element {
-  const [view, setView] = useState<'focus' | 'progress'>('focus')
+  const [view, setView] = useState<'focus' | 'progress' | 'friends'>('focus')
   const [darkMode, setDarkMode] = useState(() => window.localStorage.getItem('focus-companion:theme') === 'dark')
   const [celebrating, setCelebrating] = useState(false)
   const previousSnapshot = useRef(snapshot)
@@ -71,10 +72,10 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
   return <div className={darkMode ? 'app-shell app-shell--dark' : 'app-shell'}>
     <nav className="app-nav" aria-label="Main navigation">
       <button type="button" className="app-nav__brand" onClick={() => setView('focus')}>Focus Companion</button>
-      <div className="app-nav__links"><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button><button className="app-nav__tab app-nav__tab--quiet" type="button" disabled title="Friends will arrive with accounts and cloud sync">Friends</button></div>
+      <div className="app-nav__links"><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button><button className={view === 'friends' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('friends')}>Friends</button></div>
       <div className="app-nav__meta"><span>2 days back this week</span><button type="button" aria-label={darkMode ? 'Use light mode' : 'Use dark mode'} aria-pressed={darkMode} className="app-nav__settings" onClick={() => setDarkMode((value) => !value)}>{darkMode ? '☀' : '☾'}</button></div>
     </nav>
-    {view === 'focus' ? <StudyDesk snapshot={snapshot} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} onTaskComplete={triggerCelebration} /> : <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} />}
+    {view === 'focus' ? <StudyDesk snapshot={snapshot} onStart={onStart} onPause={onPause} onResume={onResume} onEndEarly={onEndEarly} onTaskComplete={triggerCelebration} /> : view === 'progress' ? <ProgressPage completedPomodoros={stars} sessions={history} onStartAnother={() => setView('focus')} /> : <FriendsPage completedPomodoros={stars} sessions={history} onStartFocus={() => setView('focus')} />}
     <FloatingCompanion phase={snapshot.phase} page={view} celebrating={celebrating} />
   </div>
 }

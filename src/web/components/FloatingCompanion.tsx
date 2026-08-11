@@ -14,7 +14,7 @@ interface FloatingPosition {
 
 export interface FloatingCompanionProps {
   readonly phase: TimerPhase
-  readonly page: 'focus' | 'progress'
+  readonly page: 'focus' | 'progress' | 'friends'
   readonly celebrating?: boolean
 }
 
@@ -54,7 +54,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
     if (celebrating) return 'Blue-maned lion celebrating after a completed focus session'
     if (phase === 'focus') return 'Blue-maned lion studying with you'
     if (phase === 'short_break' || phase === 'long_break' || phase === 'paused') return 'Blue-maned lion resting during a break'
-    return page === 'progress' ? 'Blue-maned lion keeping your place' : 'Blue-maned lion companion ready to study'
+    return page === 'progress' ? 'Blue-maned lion keeping your place' : page === 'friends' ? 'Blue-maned lion cheering for your circle' : 'Blue-maned lion companion ready to study'
   }, [celebrating, page, phase])
   useEffect(() => {
     if (phase !== 'idle' || celebrating || dragging) {
