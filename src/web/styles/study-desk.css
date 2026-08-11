@@ -445,6 +445,15 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 @keyframes companion-hop { 0% { transform: translateY(0) rotate(0); } 45% { transform: translateY(-12px) rotate(-2deg) scale(1.02); } 100% { transform: translateY(0) rotate(0); } }
 @keyframes companion-walk { 0%, 100% { transform: translate(0, 0) rotate(-1deg) scaleY(1); } 25% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } 50% { transform: translate(6px, 0) rotate(-1deg) scaleY(1); } 75% { transform: translate(3px, -4px) rotate(1deg) scaleY(.98); } }
 
+/* Keep the timer visually centered after the right study-corner became a floating companion. */
+.study-desk > .focus-canvas { padding-right: 360px; }
+@media (max-width: 1100px) and (min-width: 721px) {
+  .study-desk > .focus-canvas { padding-right: 240px; }
+}
+@media (max-width: 720px) {
+  .study-desk > .focus-canvas { padding-right: 24px; }
+}
+
 /* Final high-resolution asset treatment: one complete Stitch PNG per action, no sprite-sheet crop. */
 .floating-companion { width: 220px; }
 .floating-companion__pet { width: 220px; height: 236px; }
