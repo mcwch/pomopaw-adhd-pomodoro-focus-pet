@@ -71,7 +71,7 @@ function AppViews({ snapshot, stars, history, onStart, onPause, onResume, onEndE
 
   return <div className={darkMode ? 'app-shell app-shell--dark' : 'app-shell'}>
     <nav className="app-nav" aria-label="Main navigation">
-      <button type="button" className="app-nav__brand" onClick={() => setView('focus')}>Focus Companion</button>
+      <button type="button" className="app-nav__brand" onClick={() => setView('focus')}>PomoPaw</button>
       <div className="app-nav__links"><button className={view === 'focus' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('focus')}>Focus</button><button className={view === 'progress' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('progress')}>Progress</button><button className={view === 'friends' ? 'app-nav__tab app-nav__tab--active' : 'app-nav__tab'} type="button" onClick={() => setView('friends')}>Friends</button></div>
       <div className="app-nav__meta"><span>2 days back this week</span><button type="button" aria-label={darkMode ? 'Use light mode' : 'Use dark mode'} aria-pressed={darkMode} className="app-nav__settings" onClick={() => setDarkMode((value) => !value)}>{darkMode ? '☀' : '☾'}</button></div>
     </nav>

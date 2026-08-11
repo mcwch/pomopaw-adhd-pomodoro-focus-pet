@@ -101,7 +101,7 @@ export default function FloatingCompanion({ phase, page, celebrating = false }: 
   }, [position])
 
   if (hidden) {
-    return <button className="floating-companion__reopen" type="button" onClick={() => setHidden(false)} aria-label="Show study companion">Show companion</button>
+    return <button className="floating-companion__reopen" type="button" onClick={() => setHidden(false)} aria-label="Show pet">Show pet</button>
   }
 
   return <aside

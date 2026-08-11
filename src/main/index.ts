@@ -69,7 +69,7 @@ app.whenReady().then(async () => {
 
   ipcMain.handle('app:ready', (_event, request: unknown) => {
     appReadyRequestSchema.parse(request)
-    return { applicationName: 'Focus Companion' }
+    return { applicationName: 'PomoPaw' }
   })
 
   ipcMain.handle('ollama:status', () => detectLocalOllama())
@@ -124,10 +124,10 @@ app.whenReady().then(async () => {
   void timerController.getSnapshot().then((snapshot) => overlayController?.sync(snapshot))
 
   tray = new Tray(icon)
-  tray.setToolTip('Focus Companion')
+  tray.setToolTip('PomoPaw')
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Show Focus Companion', click: () => BrowserWindow.getAllWindows()[0]?.show() },
-    { label: 'Hide companion', click: () => overlayController?.hide() },
+    { label: 'Show PomoPaw', click: () => BrowserWindow.getAllWindows()[0]?.show() },
+    { label: 'Hide pet', click: () => overlayController?.hide() },
     { label: 'Quit', click: () => app.quit() }
   ]))
   tray.on('click', () => BrowserWindow.getAllWindows()[0]?.show())
