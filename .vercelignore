@@ -1,0 +1,15 @@
+node_modules
+.git
+.worktrees
+.stitch
+.stitch-api-tmp
+.qa
+dist
+dist-web
+out
+build
+resources
+tests
+docs
+*.log
+*.zip
