@@ -25,6 +25,8 @@ This separation keeps the competitive surface honest while still respecting part
 
 The store contains the active snapshot, focus history, stars, tasks, recovery state, and hydration status. Browser storage is used for the web build; Electron persistence is routed through the main/preload boundary. The domain records enough information to reconstruct a session after a refresh and to derive monthly calendar markers, streaks, and milestone progress.
 
+There is no remote database in the current release. This is deliberate: a user can start, pause, recover, and complete a Pomodoro without an account or network connection. Friends uses mock/preview data and does not persist social profiles.
+
 Tasks are intentionally capped at three active items. This is a product constraint, not a rendering limitation: a short rail reduces choice overload for the initial ADHD-focused flow.
 
 ## Pet state machine
@@ -77,5 +79,4 @@ client session -> event outbox -> authenticated API -> durable store
                                              \\-> weekly leaderboard projection
 ```
 
-The timer remains useful offline, and sync can reconcile recorded session events later. Do not make a live network connection a prerequisite for starting or completing a Pomodoro.
-
+The durable store could be a Postgres-compatible service once the provider decision is made. The timer remains useful offline, and sync can reconcile recorded session events later. Do not make a live network connection a prerequisite for starting or completing a Pomodoro.

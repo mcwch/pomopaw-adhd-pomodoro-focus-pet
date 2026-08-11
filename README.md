@@ -78,6 +78,16 @@ See [the architecture guide](docs/architecture.md) for runtime boundaries, timer
 - Vercel static hosting for the web demo
 - Mistral API through a server-side proxy for optional task help
 
+### Data layer
+
+PomoPaw **does not use a remote database yet**. The current release is intentionally local-first:
+
+- Web: browser-local persistence for tasks, timer recovery, history, rewards, and theme.
+- Desktop: local application persistence behind the Electron main/preload boundary.
+- Friends: clearly labelled mock/preview data; no account or social data is stored.
+
+When accounts and cloud sync are added, the planned boundary is an authenticated API backed by a durable database (the specific provider is intentionally not chosen yet). Offline timer use will remain independent of that service.
+
 ## Repository layout
 
 ```text
