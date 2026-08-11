@@ -28,4 +28,13 @@ describe('Pomodoro timer', () => {
     expect(result.settledSession).toMatchObject({ outcome: 'partial', elapsedSeconds: 1080, awardedStars: 0 })
     expect(result.snapshot).toMatchObject({ phase: 'idle', completedFocusCount: 2 })
   })
+
+  it('allows a paused focus to end early using only elapsed focus time', () => {
+    const started = startFocus({ task, completedFocusCount: 2 }, '2026-08-08T09:00:00.000Z', 'session-3')
+    const paused = pauseTimer(started, '2026-08-08T09:18:00.000Z')
+    const result = endFocusEarly(paused, '2026-08-08T09:30:00.000Z')
+
+    expect(result.settledSession).toMatchObject({ outcome: 'partial', elapsedSeconds: 1080, awardedStars: 0 })
+    expect(result.snapshot).toMatchObject({ phase: 'idle', completedFocusCount: 2 })
+  })
 })

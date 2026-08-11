@@ -41,8 +41,10 @@ export function advanceTimer(snapshot: TimerSnapshot, now: string): TimerTransit
   return { snapshot: next, settledSession: session(snapshot, now, 'completed', FOCUS_SECONDS, 1) }
 }
 export function endFocusEarly(snapshot: TimerSnapshot, now: string): TimerTransition {
-  if (snapshot.phase !== 'focus') throw new Error('Only focus can end early')
-  return { snapshot: idleTimer(snapshot.completedFocusCount), settledSession: session(snapshot, now, 'partial', Math.min(FOCUS_SECONDS, elapsed(snapshot.startedAt!, now)), 0) }
+  const pausedRemaining = snapshot.phase === 'paused' && snapshot.pausedFrom === 'focus' ? snapshot.remainingSeconds : null
+  if (snapshot.phase !== 'focus' && pausedRemaining === null) throw new Error('Only focus can end early')
+  const elapsedSeconds = pausedRemaining !== null ? Math.max(0, FOCUS_SECONDS - pausedRemaining) : Math.min(FOCUS_SECONDS, elapsed(snapshot.startedAt!, now))
+  return { snapshot: idleTimer(snapshot.completedFocusCount), settledSession: session(snapshot, now, 'partial', elapsedSeconds, 0) }
 }
 function active(phase: ActivePhase, task: TimerSnapshot['task'], completedFocusCount: number, now: string, sessionId: string): TimerSnapshot {
   const seconds = phase === 'focus' ? FOCUS_SECONDS : phase === 'short_break' ? SHORT_BREAK_SECONDS : LONG_BREAK_SECONDS
