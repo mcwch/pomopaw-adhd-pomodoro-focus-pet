@@ -455,6 +455,8 @@ button:focus-visible, input:focus-visible { outline: 3px solid #7ed7c3; outline-
 .app-shell--dark .friends-avatar { background: rgba(143,179,197,.2); }
 .app-shell--dark .friends-avatar--you { background: var(--mint); color: #062d43; }
 .app-shell--dark .friends-code-field input { color: var(--primary); }
+.app-shell--dark .friends-primary--invite { border-color: var(--mint); background: var(--mint); color: #062d43; }
+.app-shell--dark .friends-primary--invite:disabled { opacity: .88; }
 
 @media (max-width: 800px) {
   .friends-page { padding: 34px 22px 52px; }

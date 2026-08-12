@@ -21,4 +21,10 @@ describe('FriendsPage', () => {
     await user.click(screen.getByRole('button', { name: 'Start 25 minutes together' }))
     expect(onStartFocus).toHaveBeenCalledOnce()
   })
+
+  it('marks the disabled invite CTA for a dark-theme-safe treatment', () => {
+    render(<div className="app-shell app-shell--dark"><FriendsPage completedPomodoros={0} sessions={[]} onStartFocus={vi.fn()} /></div>)
+
+    expect(screen.getByRole('button', { name: 'Add a friend' }).classList.contains('friends-primary--invite')).toBe(true)
+  })
 })

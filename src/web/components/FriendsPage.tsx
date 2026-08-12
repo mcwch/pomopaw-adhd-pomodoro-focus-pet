@@ -77,7 +77,7 @@ export default function FriendsPage({ completedPomodoros, sessions, onStartFocus
         <section className="friends-card friends-card--invite" aria-labelledby="find-people-heading">
           <h2 id="find-people-heading">Find your people</h2>
           <div className="friends-invite-actions">
-            <button type="button" className="friends-primary" disabled title="Accounts and cloud sync are coming next">Add a friend</button>
+            <button type="button" className="friends-primary friends-primary--invite" disabled title="Accounts and cloud sync are coming next">Add a friend</button>
             <div className="friends-code-field"><input aria-label="Invite code" value={inviteCode} onChange={(event) => setInviteCode(event.target.value)} placeholder="Have an invite code?" /><button type="button" aria-label="Submit invite code" disabled={!inviteCode.trim()}>&rarr;</button></div>
           </div>
           <p className="friends-privacy">&#128274; Friends see only the focus time and streaks you choose to share.</p>
