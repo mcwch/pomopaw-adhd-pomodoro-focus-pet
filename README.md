@@ -142,6 +142,18 @@ PowerShell:
 
 Restart the dev server after changing the variable. Mistral Free mode has rate and usage limits; the UI explains when the helper is unavailable and the rest of PomoPaw continues to work.
 
+### AI behavior
+
+PomoPaw uses a small, deliberately narrow prompt so the helper supports action rather than replacing the user’s judgment. It asks Mistral to:
+
+- turn the user’s situation into one concrete 2–5 minute first action;
+- use the task details the user provided and avoid inventing apps, places, files, or other context;
+- start the named task directly instead of defaulting to generic mindfulness advice;
+- offer a calming action only when the user explicitly describes emotional overwhelm without a concrete task; and
+- return one kind, imperative sentence under 20 words.
+
+The helper is stateless: it does not store prompts, responses, or personal task history.
+
 ## Deployment
 
 The web build is configured for Vercel in [`vercel.json`](vercel.json). The production demo is currently deployed at [focus-companion-indol.vercel.app](https://focus-companion-indol.vercel.app). The hosted `/api/ai/first-step` Function reads `ADHD_APP_MISTRAL_API_KEY` from Vercel’s server-side production environment; the key is never bundled into the browser.
