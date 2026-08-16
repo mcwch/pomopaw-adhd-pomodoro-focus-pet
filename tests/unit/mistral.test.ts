@@ -15,6 +15,20 @@ describe('Mistral cloud task helper', () => {
     expect(JSON.parse(String(request?.body)).messages[1].content).toContain('Read two pages')
   })
 
+  it('asks for task-specific steps instead of a generic mindfulness fallback', async () => {
+    let request: RequestInit | undefined
+    await requestMistralFirstStep('Prepare slides for tomorrow', 'test-key', async (_url, init) => {
+      request = init
+      return new Response(JSON.stringify({ choices: [{ message: { content: 'Open the presentation and add the title slide.' } }] }), { status: 200 })
+    })
+
+    const payload = JSON.parse(String(request?.body)) as { temperature: number; messages: Array<{ role: string; content: string }> }
+    expect(payload.temperature).toBeGreaterThan(0.2)
+    expect(payload.messages[0].content).toContain('Use details from the user')
+    expect(payload.messages[0].content).toContain('Do not recommend breathing')
+    expect(payload.messages[0].content).toContain('Never invent details')
+  })
+
   it('does not call Mistral when the API key is missing', async () => {
     let called = false
     const result = await requestMistralFirstStep('Read two pages', '', async () => {
