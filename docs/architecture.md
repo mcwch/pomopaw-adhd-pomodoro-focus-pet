@@ -68,7 +68,7 @@ Failures are non-blocking. A missing key, quota error, network error, or malform
 
 ## Deployment topology
 
-The repository builds a static Vite output into `dist-web`. Vercel serves that output using `vercel.json`. The Electron application remains a separately packaged desktop artifact. A future production AI endpoint can be implemented as a Vercel Function or another server-side route; it must preserve the same validation and no-secret-in-client guarantees.
+The repository builds a static Vite output into `dist-web`. Vercel serves that output using `vercel.json` and exposes `api/ai/first-step.ts` as the server-side Mistral Function. The Electron application remains a separately packaged desktop artifact. The Function preserves the same validation and no-secret-in-client guarantees as the local development proxy.
 
 ## Future scaling boundary
 

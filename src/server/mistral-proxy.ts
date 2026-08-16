@@ -3,6 +3,8 @@ import { requestMistralFirstStep, type MistralFirstStepResult } from './mistral'
 
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 type ProxyBody = { available: boolean; suggestion: string | null }
+type VercelRequestLike = { method?: string; body?: unknown }
+type VercelResponseLike = { status: (code: number) => VercelResponseLike; json: (body: ProxyBody) => VercelResponseLike }
 
 export async function handleMistralProxyRequest(input: { method?: string; task?: unknown }, apiKey: string | undefined, fetchLike: FetchLike = fetch): Promise<{ status: number; body: ProxyBody }> {
   if (input.method !== 'POST') return { status: 405, body: { available: false, suggestion: null } }
@@ -11,6 +13,22 @@ export async function handleMistralProxyRequest(input: { method?: string; task?:
 
   const result: MistralFirstStepResult = await requestMistralFirstStep(input.task, apiKey, fetchLike)
   return { status: result.available ? 200 : 502, body: result }
+}
+
+export async function handleMistralVercelRequest(request: VercelRequestLike, response: VercelResponseLike, apiKey: string | undefined = process.env.ADHD_APP_MISTRAL_API_KEY, fetchLike: FetchLike = fetch): Promise<void> {
+  let body: { task?: unknown } = {}
+  if (typeof request.body === 'string') {
+    try {
+      body = JSON.parse(request.body) as { task?: unknown }
+    } catch {
+      body = {}
+    }
+  } else if (request.body && typeof request.body === 'object') {
+    body = request.body as { task?: unknown }
+  }
+
+  const result = await handleMistralProxyRequest({ method: request.method, task: body.task }, apiKey, fetchLike)
+  response.status(result.status).json(result.body)
 }
 
 function writeJson(response: ServerResponse, status: number, body: ProxyBody): void {

@@ -144,7 +144,7 @@ Restart the dev server after changing the variable. Mistral Free mode has rate a
 
 ## Deployment
 
-The web build is configured for Vercel in [`vercel.json`](vercel.json). The production demo is currently deployed at [focus-companion-indol.vercel.app](https://focus-companion-indol.vercel.app). Configure `ADHD_APP_MISTRAL_API_KEY` as a server-side Vercel environment variable before enabling the hosted AI endpoint.
+The web build is configured for Vercel in [`vercel.json`](vercel.json). The production demo is currently deployed at [focus-companion-indol.vercel.app](https://focus-companion-indol.vercel.app). The hosted `/api/ai/first-step` Function reads `ADHD_APP_MISTRAL_API_KEY` from Vercel’s server-side production environment; the key is never bundled into the browser.
 
 ## Roadmap
 
