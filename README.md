@@ -142,17 +142,19 @@ PowerShell:
 
 Restart the dev server after changing the variable. Mistral Free mode has rate and usage limits; the UI explains when the helper is unavailable and the rest of PomoPaw continues to work.
 
-### AI behavior
+### Mistral configuration
 
-PomoPaw uses a small, deliberately narrow prompt so the helper supports action rather than replacing the user’s judgment. It asks Mistral to:
+The hosted task helper uses a server-side Mistral chat-completions request with these intentionally conservative settings:
 
-- turn the user’s situation into one concrete 2–5 minute first action;
-- use the task details the user provided and avoid inventing apps, places, files, or other context;
-- start the named task directly instead of defaulting to generic mindfulness advice;
-- offer a calming action only when the user explicitly describes emotional overwhelm without a concrete task; and
-- return one kind, imperative sentence under 20 words.
+| Setting | Value | Purpose |
+| --- | --- | --- |
+| Model | `mistral-small-latest` | Low-latency, cost-conscious task help |
+| Temperature | `0.45` | Some variation without making first steps erratic |
+| Max output tokens | `80` | Keeps the response short and focused |
+| Streaming | Disabled | The UI shows one complete first-step suggestion |
+| Request boundary | `POST /api/ai/first-step` | Keeps the API key out of browser code |
 
-The helper is stateless: it does not store prompts, responses, or personal task history.
+Each request is stateless: PomoPaw does not store prompts, responses, or personal task history.
 
 ## Deployment
 
